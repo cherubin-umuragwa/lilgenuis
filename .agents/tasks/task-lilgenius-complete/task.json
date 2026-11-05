@@ -1,0 +1,7 @@
+{
+  "task_id": "task-lilgenius-complete",
+  "task_description": "Build LilGenius — a production-quality children's educational web app (ages 6-12, DRC/Africa focus) with Next.js 16 App Router, TypeScript strict, Tailwind CSS v4, Framer Motion, Lucide React. Covers foundation (types, i18n, storage, base UI), all pages (landing, dashboard, onboarding, lessons, quiz, achievements, profile, explore, daily challenges, about/parents/teachers, auth UI), educational content (Math, Science, Geography, History, Languages, General Knowledge, Logic, Programming), gamification (XP, levels, badges, streaks, characters), and final polish (a11y, animations, responsive, zero TS/ESLint errors, build passes).",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004", "FEAT-005"],
+  "blocked_reason": null
+}

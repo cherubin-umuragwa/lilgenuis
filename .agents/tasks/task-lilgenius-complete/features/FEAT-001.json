@@ -1,0 +1,86 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Foundation: TypeScript types, i18n, localStorage utilities, Tailwind CSS v4 theme configuration, base UI primitives, Navbar/Footer, and root layout wiring. This FEAT has no dependencies — it creates all shared infrastructure that every other FEAT builds on.",
+  "status": "completed",
+  "steps": [
+    "1. Replace src/app/globals.css entirely: add @import 'tailwindcss'; then a @theme block defining all brand CSS custom properties: --color-primary: #7656E8, --color-blue: #4395F5, --color-turquoise: #36CFC9, --color-coral: #FF786B, --color-yellow: #FFD65A, --color-pink: #FF91B8, --color-mint: #70DDB0, --color-background: #F8F8FF, --color-text: #272747, --font-heading: 'Fredoka', sans-serif, --font-body: 'Nunito', sans-serif. Also define base @layer base styles: html { font-family: var(--font-body); color: var(--color-text); background: var(--color-background); }, h1-h6 { font-family: var(--font-heading); }, @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms; transition-duration: 0.01ms; } }",
+
+    "2. Rewrite src/app/layout.tsx: import Fredoka and Nunito from 'next/font/google' (Fredoka: subsets ['latin'], variable '--font-heading'; Nunito: subsets ['latin'], variable '--font-body'). Update Metadata title to 'LilGenius | Learn. Play. Discover. Create.' and description. Apply font variables to html element. Remove Geist imports. The component signature stays as RootLayout with { children: React.ReactNode } — do NOT use LayoutProps<T> since root layout doesn't take params.",
+
+    "3. Create src/app/page.tsx: a simple redirect to /en. Use 'import { redirect } from next/navigation; export default function Home() { redirect(\"/en\"); }'. This replaces the default Next.js boilerplate.",
+
+    "4. Create src/types/index.ts exporting all interfaces: Locale ('en' | 'fr'), Subject { id, name, nameEn, nameFr, description, descriptionEn, descriptionFr, icon (LucideIcon name string), color (tailwind class), bgColor, lessons: Lesson[], totalLessons, estimatedMinutes }, Topic { id, subjectId, name, description }, Lesson { id, subjectId, topicId, title, titleEn, titleFr, description, content: LessonContent[], duration, difficulty: 'beginner' | 'intermediate' | 'advanced', order }, LessonContent { type: 'text' | 'image' | 'video' | 'interactive', title?, body?, imageUrl?, alt? }, Question { id, lessonId, type: ExerciseType, questionEn, questionFr, options?: string[], correctAnswer: string | string[], explanation?, explanationEn?, explanationFr?, points: number }, ExerciseType = 'multiple-choice' | 'true-false' | 'fill-in-blank' | 'matching-pairs', Answer { questionId, userAnswer: string | string[], isCorrect, pointsEarned, timestamp }, LearningPath { id, studentId, subjectId, lessons: string[], currentLessonId, completedLessons: string[], progress: number }, Achievement { id, title, titleEn, titleFr, description, descriptionEn, descriptionFr, iconName: string, color, condition: AchievementCondition, unlockedAt?: Date }, AchievementCondition { type: 'lessons_completed' | 'quiz_score' | 'streak_days' | 'points_earned' | 'subjects_started' | 'first_login', threshold: number }, Badge = Achievement, DailyChallenge { id, date: string, subjectId, lessonId, title, titleEn, titleFr, description, questions: Question[], bonusPoints: number, completed?: boolean }, StudentProfile { id, name, age, ageGroup: '6-8' | '9-10' | '11-12', level: StudentLevel, language: Locale, character: CharacterType, interests: string[], createdAt: string, lastActiveAt: string }, StudentLevel { current: 1|2|3|4|5|6, title: string, xpRequired: number, currentXP: number, totalXP: number }, CharacterType = 'explorer' | 'scientist' | 'artist', StudentProgress { studentId, subjectProgress: Record<string, SubjectProgress>, totalLessonsCompleted: number, totalPoints: number, currentStreak: number, longestStreak: number, lastStudyDate: string, achievements: string[], dailyChallengesCompleted: string[] }, SubjectProgress { subjectId, lessonsCompleted: string[], totalLessons: number, averageScore: number, lastStudied: string }, GameState { currentLessonId?, currentQuestionIndex: number, answers: Answer[], score: number, isComplete: boolean, startedAt: string }, Translation { [key: string]: string | Translation }",
+
+    "5. Create src/config/constants.ts: export APP_NAME, APP_TAGLINE, DEFAULT_LOCALE, SUPPORTED_LOCALES, LEVEL_THRESHOLDS (array of 6 objects: { level: 1-6, title: string, xpRequired: number } where titles are 'Curious Explorer', 'Young Learner', 'Knowledge Seeker', 'Bright Scholar', 'Wise Adventurer', 'Master Explorer' and thresholds are 0, 100, 300, 600, 1000, 1500), POINTS_CONFIG { correct_answer: 10, lesson_complete: 50, daily_challenge: 100, streak_bonus: 25 }, STORAGE_KEYS { PROFILE, PROGRESS, GAME_STATE, LANGUAGE, STREAK }",
+
+    "6. Create src/content/translations/en.ts: export default object covering nav (home, subjects, explore, dashboard, achievements, profile, dailyChallenge, about, parents, teachers, login, register), landing (hero headline 'Big Dreams Start With Little Discoveries.', tagline, cta buttons, section titles for 'How LilGenius Works', 'Featured Activities', benefits), dashboard (greeting 'Welcome back, {name}!', dailyGoal, continueLearning, subjects, achievements, recommendations, streak, level), subjects (mathematics, science, geography, history, languages, generalKnowledge, logic, programming — each with name, description), quiz (question, correct, incorrect, next, submit, score, retry), achievements (title, unlocked, locked, points), profile (title, character, language, ageGroup, editProfile), onboarding (welcome, chooseName, chooseAge, chooseLanguage, chooseCharacter, chooseInterests, ready), common (loading, error, empty, retry, back, next, start, continue, finish, save, cancel, search, filter)",
+
+    "7. Create src/content/translations/fr.ts: same structure as en.ts with French translations. Key strings: hero 'Les Grands Rêves Commencent Par de Petites Découvertes.', subjects in French, all UI labels in French. Maintain exact same key structure as en.ts.",
+
+    "8. Create src/lib/i18n/index.ts: export type Locale = 'en' | 'fr'; export const defaultLocale: Locale = 'en'; export const supportedLocales: Locale[] = ['en', 'fr']; export async function getTranslations(locale: Locale): Promise<Translation> — imports en.ts or fr.ts dynamically; export function t(translations: Translation, key: string, replacements?: Record<string, string>): string — dot-notation key lookup with optional {variable} replacement; export function isValidLocale(locale: string): locale is Locale; export function getLocaleFromPathname(pathname: string): Locale.",
+
+    "9. Create src/lib/storage/index.ts: export class StorageService { private static isAvailable(): boolean { return typeof window !== 'undefined'; } static get<T>(key: string): T | null; static set<T>(key: string, value: T): void; static remove(key: string): void; static clear(): void; }. All methods guard with isAvailable() check. Use JSON.parse/stringify with try/catch.",
+
+    "10. Create src/lib/repositories/profile.repository.ts: export class ProfileRepository { static getProfile(): StudentProfile | null; static saveProfile(profile: StudentProfile): void; static updateProfile(partial: Partial<StudentProfile>): void; static deleteProfile(): void; static hasProfile(): boolean; }. Uses StorageService with STORAGE_KEYS.PROFILE.",
+
+    "11. Create src/lib/repositories/progress.repository.ts: export class ProgressRepository { static getProgress(studentId: string): StudentProgress | null; static saveProgress(progress: StudentProgress): void; static updateSubjectProgress(studentId: string, subjectId: string, update: Partial<SubjectProgress>): void; static addAchievement(studentId: string, achievementId: string): void; static incrementStreak(studentId: string): void; static resetStreak(studentId: string): void; static addPoints(studentId: string, points: number): void; static markDailyChallengeComplete(studentId: string, challengeId: string): void; }. Uses StorageService with STORAGE_KEYS.PROGRESS.",
+
+    "12. Create src/lib/utils/cn.ts: export function cn(...classes: (string | undefined | null | false)[]): string { return classes.filter(Boolean).join(' '); } — a simple class name merger (no external dependency needed for Tailwind v4).",
+
+    "13. Create src/lib/utils/date.ts: export function getTodayKey(): string (YYYY-MM-DD); export function getStreakDays(lastStudyDate: string): number; export function formatDate(date: string, locale: Locale): string; export function getDailyChallengeIndex(date: string, total: number): number — seeded by date hash for deterministic daily rotation.",
+
+    "14. Create src/hooks/useProfile.ts: 'use client'; export function useProfile() — reads/writes profile via ProfileRepository, returns { profile, saveProfile, updateProfile, hasProfile, isLoading }. Uses useState + useEffect for client-side hydration safety.",
+
+    "15. Create src/hooks/useProgress.ts: 'use client'; export function useProgress(studentId: string | undefined) — reads/writes progress via ProgressRepository, returns { progress, addPoints, completedLesson, completedChallenge, isLoading }.",
+
+    "16. Create src/hooks/useTranslations.ts: 'use client'; export function useTranslations(locale: Locale) — returns { t: (key: string, replacements?) => string, locale } using the translation loader.",
+
+    "17. Create src/components/ui/Button.tsx: 'use client'; variants: 'primary' (bg-primary text-white), 'secondary' (bg-blue text-white), 'outline' (border-2 border-primary text-primary), 'ghost' (transparent), 'danger' (bg-coral text-white). Sizes: 'sm', 'md', 'lg'. Props: variant, size, disabled, loading, leftIcon, rightIcon, onClick, children, className, type, asChild. Wrap with motion.button from framer-motion for hover scale (1.03) and tap scale (0.97) — skip if prefers-reduced-motion. Include aria-disabled and aria-busy for loading state. Spinner shown when loading=true.",
+
+    "18. Create src/components/ui/Card.tsx: 'use client'; a motion.div wrapper with rounded-2xl, shadow-md, bg-white, optional colorful left border or top gradient. Props: children, className, accent (color string), hoverable (adds hover lift animation), onClick. Export named CardHeader, CardBody, CardFooter as sub-components.",
+
+    "19. Create src/components/ui/Badge.tsx: small pill component with colorful background. Props: children, variant (maps to color classes), size, icon (LucideIcon component). Not to be confused with Achievement Badge — this is the UI chip widget.",
+
+    "20. Create src/components/ui/ProgressBar.tsx: 'use client'; animated progress bar using framer-motion width animation. Props: value (0-100), max?, color (string, defaults to primary), label, showPercentage, height, animated. Uses motion.div for the fill. Supports aria-valuenow, aria-valuemin, aria-valuemax.",
+
+    "21. Create src/components/ui/Modal.tsx: 'use client'; uses AnimatePresence + motion.div for entrance/exit. Backdrop click closes. Trap focus inside modal. Props: isOpen, onClose, title, children, size ('sm'|'md'|'lg'|'xl'). Uses createPortal to render into document.body. Keyboard: Escape closes.",
+
+    "22. Create src/components/ui/Avatar.tsx: displays character avatar or initials fallback. Props: name, character?: CharacterType, size ('sm'|'md'|'lg'|'xl'), className. Renders the inline SVG character or a colored circle with initials.",
+
+    "23. Create src/components/ui/Spinner.tsx and LoadingState.tsx: Spinner is an animated SVG circle. LoadingState wraps Spinner with optional message text and centered layout. Both accessible with role='status' aria-label='Loading'.",
+
+    "24. Create src/components/ui/EmptyState.tsx: centered layout with an SVG illustration (inline, no emoji), heading, description, and optional action button. Props: title, description, action?, illustration ('no-content'|'no-results'|'no-achievements'|'start-learning').",
+
+    "25. Create src/components/ui/ErrorState.tsx: red-tinted card with AlertCircle icon (Lucide), error title, message, and retry button. Props: title, message, onRetry?.",
+
+    "26. Create src/components/characters/MascotSVG.tsx: 'use client'; exports three inline SVG mascot designs as React components: ExplorerMascot, ScientistMascot, ArtistMascot. Each is a simple, friendly cartoon character SVG (circles, rounded rectangles for body, simple face features) sized at ~200x200 viewBox, colored using brand palette. Also export a LilGeniusLogo SVG component (stylized star with book). No external image files — pure inline SVG JSX.",
+
+    "27. Create src/components/layout/Navbar.tsx: 'use client'; sticky top navbar with: LilGenius logo (inline SVG or text logo), nav links (Home, Subjects, Explore, Dashboard, Challenges), language switcher (EN/FR buttons), profile avatar button. Mobile: hamburger menu toggling a slide-down mobile menu. Uses framer-motion for mobile menu animation. Accepts locale prop. Active link highlighted. Accessible: role='navigation', aria-label='Main navigation'.",
+
+    "28. Create src/components/layout/Footer.tsx: footer with logo, tagline, link columns (Learn: Subjects, Lessons, Challenges, Explore; Community: About, Parents, Teachers; Languages: EN, FR), copyright. No lorem ipsum. Accessible landmarks.",
+
+    "29. Create src/app/[locale]/layout.tsx: async Server Component. Signature: 'export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> })'. Await params, validate locale with isValidLocale(), redirect to /en if invalid. Load translations with getTranslations(locale). Render <Navbar locale={locale} /> and <Footer /> wrapping {children} inside a <main> tag. This is the locale-scoped layout that all locale pages share.",
+
+    "30. Create src/app/[locale]/page.tsx as the locale home — it renders the LandingPage component (to be built in FEAT-002). For now, create a minimal placeholder: a centered div with 'LilGenius — coming soon' styled with brand colors. This placeholder is replaced in FEAT-002 but is needed to keep the build valid after FEAT-001."
+  ],
+  "acceptance_criteria": [
+    "npx tsc --noEmit passes with zero errors after all files are created",
+    "npm run build completes successfully",
+    "npm run lint passes with zero errors",
+    "src/app/globals.css has a @theme block defining all 9 brand color custom properties and 2 font custom properties",
+    "src/types/index.ts exports all required interfaces: Subject, Topic, Lesson, LessonContent, Question, ExerciseType, Answer, LearningPath, Achievement, AchievementCondition, Badge, DailyChallenge, StudentProfile, StudentLevel, CharacterType, StudentProgress, SubjectProgress, GameState, Translation",
+    "src/content/translations/en.ts and fr.ts exist with matching key structures",
+    "src/lib/storage/index.ts guards all localStorage access with typeof window check",
+    "All UI components in src/components/ui/ have proper TypeScript props interfaces",
+    "src/app/[locale]/layout.tsx correctly awaits params (Next.js 16 requirement)",
+    "No TypeScript 'any' usage without explicit comment justification"
+  ],
+  "verification": [
+    "npx tsc --noEmit — must complete with 0 errors",
+    "npm run build — must complete with 0 errors",
+    "npm run lint — must complete with 0 errors/warnings"
+  ],
+  "blocked_reason": null,
+  "findings": "1. lucide-react@1.68.0 was installed but its dist/esm/ directory was missing all .mjs files and the dist/lucide-react.d.ts type declaration — the CJS bundle existed but the package.json exports map pointed to missing ESM files. Fixed by patching the exports map in node_modules to redirect 'import' and 'module' entries to the CJS bundle. Added src/types/lucide-react.d.ts as a local type declaration since the package's own .d.ts was also missing. 2. npm install itself is broken in this environment due to a corrupted array-includes sub-dependency with an invalid version string — this prevents any npm install commands from running. 3. Multiple node_modules packages (array-includes, array.prototype.flat, array.prototype.flatmap, array.prototype.tosorted, array.prototype.findlast, array.prototype.findlastindex, object.fromentries, object.groupby, string.prototype.includes, string.prototype.matchall, string.prototype.repeat, es-iterator-helpers) had severely incomplete nested es-abstract installations missing many required .js files. All were patched to use native JavaScript equivalents (Array.prototype.flat, flatMap, findLast, etc.) which are available in Node 22 and modern browsers. 4. eslint-plugin-react uses es-iterator-helpers in several files (Components.js, linkComponents.js, propWrapper.js, display-name.js, jsx-no-leaked-render.js, jsx-no-literals.js); these were patched to use a local native shim at lib/util/iteratorShim.js. 5. generateStaticParams() was added to src/app/[locale]/layout.tsx and src/app/[locale]/page.tsx to satisfy Next.js 16 static prerendering requirements for the [locale] segment. 6. useProfile and useProgress hooks were refactored to use lazy useState initializers instead of useEffect+setState to comply with the react-hooks/set-state-in-effect ESLint rule."
+}

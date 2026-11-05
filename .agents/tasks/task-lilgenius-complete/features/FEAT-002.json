@@ -1,0 +1,82 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "All application pages: Landing, Dashboard, Onboarding wizard, Subjects listing, Subject detail, Lesson viewer, Quiz engine, Achievements, Profile, Explore, Daily Challenges, About/Parents/Teachers, Login/Register. Depends on FEAT-001 for all types, UI primitives, Navbar/Footer, and layout. FEAT-003 (content) is NOT required for these pages to render — they should handle empty/loading states gracefully.",
+  "status": "pending",
+  "steps": [
+    "1. Create src/components/landing/HeroSection.tsx: 'use client'; full-width hero with headline 'Big Dreams Start With Little Discoveries.' in Fredoka font large (text-5xl md:text-7xl), tagline, two CTA buttons (Start Learning → /en/onboarding, Explore Subjects → /en/subjects). Left side text, right side ExplorerMascot SVG. Background: soft purple-to-blue gradient with decorative floating geometric shapes (circles, stars as SVG elements animated with framer-motion y-axis float). Mobile: stacked, mascot below text.",
+
+    "2. Create src/components/landing/SubjectPreviewSection.tsx: 'use client'; grid of 6 subject preview cards (Math, Science, Geography, History, Languages, Logic). Each card: colored rounded card with subject icon (Lucide), subject name, short description, lesson count badge, 'Start →' button. Cards animate in with staggered entrance (framer-motion). Use hardcoded preview data (not from content files) so this works before FEAT-003. Colors: Math→purple, Science→blue, Geography→turquoise, History→coral, Languages→yellow, Logic→mint.",
+
+    "3. Create src/components/landing/HowItWorksSection.tsx: 3-step horizontal flow (mobile: vertical). Steps: 1. Choose Your Path (BookOpen icon), 2. Learn & Play (Gamepad2 icon), 3. Earn Rewards (Trophy icon). Each step: numbered circle, icon, title, 2-sentence description. Soft background color band. framer-motion scroll-triggered entrance.",
+
+    "4. Create src/components/landing/FeaturedActivitiesSection.tsx: 'use client'; 3 activity cards showcasing Daily Challenge, Quiz Mode, and Achievements. Each card: large icon, title, description, animated preview (CSS animation showing a mock progress bar or badge). Cards have distinct accent colors from brand palette.",
+
+    "5. Create src/components/landing/BenefitsSection.tsx: 6 benefit items in 2-column grid (mobile: 1 column). Each item: CheckCircle icon (Lucide), bold title, description. Benefits: Academic Growth, Critical Thinking, DRC/Africa Content, French & English, Gamified Learning, Progress Tracking. Soft background.",
+
+    "6. Create src/components/landing/CTASection.tsx: full-width colored (primary purple) call-to-action banner. Headline 'Ready to Start Your Learning Journey?', subtext, two buttons. ArtistMascot SVG on the right.",
+
+    "7. Replace the landing page placeholder: rewrite src/app/[locale]/page.tsx to import and compose all landing sections (Hero, SubjectPreview, HowItWorks, FeaturedActivities, Benefits, CTA) in order. Server Component — no 'use client'. Accepts params: Promise<{ locale: string }>.",
+
+    "8. Create src/app/[locale]/onboarding/page.tsx and src/components/onboarding/OnboardingWizard.tsx: 'use client'; multi-step wizard with 7 screens: (1) Welcome + language select (EN/FR radio cards with flag-like SVG), (2) Age group select (6-8, 9-10, 11-12 — colored cards with illustrated age range), (3) Level select (Beginner / I know some things / Advanced — with icon), (4) Interests multi-select (Mathematics, Science, Geography, History, Reading, Art, Puzzles — grid of toggleable chips), (5) Character selection (3 character cards: Explorer, Scientist, Artist — each shows MascotSVG variant), (6) Enter name (text input with validation, max 30 chars), (7) Ready screen (chosen character + 'Welcome, {name}! Your adventure begins.' + Start button → /en/dashboard). Progress indicator at top showing current step. Back/Next navigation. Saves to ProfileRepository on completion. Framer AnimatePresence for slide transitions between steps. Accessible: each step is a fieldset with legend.",
+
+    "9. Create src/app/[locale]/dashboard/page.tsx and src/components/dashboard/ widgets: 'use client'; check if profile exists, redirect to /[locale]/onboarding if not. Layout: 2-column desktop (main content left, sidebar right), single column mobile. Components to create: (a) DashboardGreeting.tsx — 'Good morning/afternoon/evening, {name}! You're on a {n}-day streak.' with animated Sun/Moon Lucide icon; (b) DailyGoalRing.tsx — circular SVG progress ring showing today's lesson progress (e.g., 2/3 lessons), animated with framer-motion pathLength; (c) ContinueLearning.tsx — horizontal scrollable row of 2-3 'Continue' lesson cards with subject color, lesson name, progress bar, Resume button; (d) SubjectGrid.tsx — 8-card grid of all subjects, each showing subject color, icon, name, N lessons, progress bar; (e) DailyChallengeBanner.tsx — prominent banner with trophy icon, today's challenge subject, points reward, 'Take Challenge' button; (f) AchievementsPreview.tsx — row of 4 recent/next achievements (locked ones shown greyed); (g) RecommendationsWidget.tsx — 2-3 recommended next lessons based on progress (or 'Start here' if new). All widgets use placeholder data when no progress exists.",
+
+    "10. Create src/app/[locale]/subjects/page.tsx: Server Component listing all 8 subject cards in a responsive grid. Import subject metadata from src/content/subjects/index.ts (created in FEAT-003) but use a safe fallback array if the file doesn't exist yet (wrap import in try/catch or use a local fallback). Each subject card: large colored icon, name, description, lesson count, difficulty badge, 'Explore →' button linking to /[locale]/subjects/[subjectId]. Use SubjectCard component.",
+
+    "11. Create src/components/subjects/SubjectCard.tsx: 'use client'; colored card with: top colored band (subject accent color), subject icon (large, Lucide), subject name (Fredoka), description, stats row (lessons count with BookOpen icon, minutes with Clock icon), difficulty badge, CTA button. Hover: lift animation with framer-motion. Click links to subject detail.",
+
+    "12. Create src/app/[locale]/subjects/[subjectId]/page.tsx: async Server Component. params: Promise<{ locale: string; subjectId: string }>. Renders subject hero (colored header with subject name, icon, description), lesson list (ordered cards with lesson title, duration, difficulty, lock/unlock state based on progress), and a Start/Continue button for the first incomplete lesson. Handle unknown subjectId with not-found.",
+
+    "13. Create src/app/[locale]/subjects/[subjectId]/lessons/[lessonId]/page.tsx: 'use client'; the lesson viewer. Layout: progress bar at top (lesson N of M), back button, lesson title. Content area: step-through multi-screen lesson content. Each LessonContent item renders as: 'text' → styled paragraph block; 'image' → Next.js Image with alt; 'interactive' → placeholder interactive card. Navigation: Previous / Next buttons between content steps. After last content step: 'Take Quiz' button leading to the quiz for this lesson. Shows lesson metadata (subject, difficulty, duration). Updates progress on lesson start via ProgressRepository.",
+
+    "14. Create src/components/lessons/LessonViewer.tsx: 'use client'; takes lesson: Lesson prop. Manages current step index. Shows LessonContent for current step. Bottom navigation. framer-motion slide transition between steps. Progress dots at top.",
+
+    "15. Create src/app/[locale]/subjects/[subjectId]/lessons/[lessonId]/quiz/page.tsx and src/components/quizzes/QuizEngine.tsx: 'use client'; the quiz engine. Props: questions: Question[], lessonId, onComplete. State: currentQuestion index, answers array, score, isComplete. Renders question type components based on question.type. Shows: question number indicator (Q3 of 10), points badge, question text, answer area (type-specific), Next/Submit button. After all questions: results screen (score, percentage, stars 1-3, correct count, retry and continue buttons). Award points via ProgressRepository on completion.",
+
+    "16. Create question type components in src/components/quizzes/: (a) MultipleChoiceQuestion.tsx — 4 option buttons in 2x2 grid, click selects, shows correct/incorrect color feedback after submit with CheckCircle/XCircle icons; (b) TrueFalseQuestion.tsx — large True/False buttons with ThumbsUp/ThumbsDown icons; (c) FillInBlankQuestion.tsx — text input with submit button, case-insensitive matching; (d) MatchingPairsQuestion.tsx — two columns of cards, click left then right to match, matched pairs highlighted. All components accept question: Question, onAnswer: (answer: string | string[]) => void, isSubmitted: boolean, correctAnswer: string | string[].",
+
+    "17. Create src/app/[locale]/achievements/page.tsx and src/components/achievements/AchievementsPage.tsx: 'use client'; grid of all 12 achievement badges. Each badge card: colored icon, badge name, description, unlock condition text, locked/unlocked state (unlocked shows unlock date, locked shows progress toward condition). Unlocked badges have a golden shimmer CSS animation. Page header shows total XP and current level with progress to next level.",
+
+    "18. Create src/components/achievements/AchievementBadge.tsx and CelebrationAnimation.tsx: AchievementBadge is a card showing the badge icon (Lucide icon mapped by iconName string), name, description, locked/unlocked state with framer-motion opacity+scale entrance. CelebrationAnimation is a 'use client' component that renders an animated overlay (confetti-like colored circles using framer-motion) triggered when isVisible=true, auto-dismisses after 3 seconds.",
+
+    "19. Create src/app/[locale]/profile/page.tsx and src/components/profile/ProfilePage.tsx: 'use client'; two sections: (a) Profile info — character avatar (large), name, age group, level badge, join date, total points, current streak; (b) Character customization — 3 character option cards (Explorer, Scientist, Artist) with click-to-select behavior, updates ProfileRepository on change. Language preference toggle (EN/FR). Edit name button (opens Modal with input). Stats summary: total lessons, subjects started, quizzes completed.",
+
+    "20. Create src/app/[locale]/explore/page.tsx: 'use client'; search and filter interface. Text search input (SearchIcon, Lucide). Filter chips: by subject (All, Math, Science, etc.), by difficulty, by duration. Results grid showing lesson cards. Client-side filtering over the full lesson catalog. EmptyState if no results. Uses local data from content files (safe import with fallback).",
+
+    "21. Create src/app/[locale]/challenges/page.tsx and src/components/challenges/DailyChallengesPage.tsx: 'use client'; today's challenge card (prominent, with countdown or completion state), this week's challenge history (Mon-Sun cards), bonus point totals. Today's challenge links to the quiz page for the challenge lesson. Shows streak bonus indicator.",
+
+    "22. Create src/app/[locale]/about/page.tsx: Server Component. Mission statement, team values, DRC/Africa focus section with Globe icon, language commitment (EN+FR with Swahili/Lingala coming soon). Professional page layout with brand colors. No lorem ipsum.",
+
+    "23. Create src/app/[locale]/parents/page.tsx: Server Component. How LilGenius helps children, privacy approach (no data collected beyond device-local localStorage), content quality overview, progress tracking features, language options. Includes a features table with CheckCircle icons.",
+
+    "24. Create src/app/[locale]/teachers/page.tsx: Server Component. Classroom use guide, curriculum alignment, how to track student progress, subject coverage table. Future features section (classroom accounts, assignments — marked as 'coming soon' with Clock icon).",
+
+    "25. Create src/app/[locale]/login/page.tsx: 'use client'; demo-mode login UI. Email + password form with proper label/input pairs. Submit button shows spinner then redirects to /[locale]/dashboard (demo — no actual auth). 'Demo Mode' banner explaining auth is coming. Link to register page. Accessible form with error states.",
+
+    "26. Create src/app/[locale]/register/page.tsx: 'use client'; demo registration form. Name, email, age group select, password, confirm password. Submit redirects to /[locale]/onboarding. Same 'Demo Mode' banner. Client-side validation (required fields, password match, email format). All form fields have labels.",
+
+    "27. Create src/components/shared/PageTransition.tsx: 'use client'; wraps page content with AnimatePresence + motion.div for fade+slide entrance animation. Props: children, key (route). Also create src/components/shared/SubjectIcon.tsx that maps subject IDs to Lucide icon components (Math→Calculator, Science→FlaskConical, Geography→Globe, History→Landmark, Languages→BookOpen, Logic→Brain, Programming→Code, General→Lightbulb).",
+
+    "28. Add 404 not-found page at src/app/not-found.tsx: friendly page with ExplorerMascot SVG, 'Oops! Page Not Found' heading, description, 'Go Home' button. Also add src/app/[locale]/not-found.tsx with the same but locale-aware."
+  ],
+  "acceptance_criteria": [
+    "All route files exist and compile without TypeScript errors",
+    "Landing page renders all 6 sections (Hero, SubjectPreview, HowItWorks, FeaturedActivities, Benefits, CTA)",
+    "Onboarding wizard has 7 steps with working navigation and saves profile to localStorage",
+    "Dashboard redirects to onboarding if no profile exists",
+    "Quiz engine renders all 4 question types and calculates score correctly",
+    "All pages are accessible via their routes in the app structure",
+    "npx tsc --noEmit passes with zero errors",
+    "npm run build completes successfully",
+    "npm run lint passes with zero errors",
+    "No page imports from content files without a safe fallback for missing data"
+  ],
+  "verification": [
+    "npx tsc --noEmit — must complete with 0 errors",
+    "npm run build — must complete with 0 errors",
+    "npm run lint — must complete with 0 errors/warnings"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
