@@ -49,4 +49,22 @@ declare module "lucide-react" {
   export const Scroll: LucideIcon;
   export const Languages: LucideIcon;
   export const FlaskConical: LucideIcon;
+  export const ArrowLeft: LucideIcon;
+  export const ArrowRight: LucideIcon;
+  export const ShieldCheck: LucideIcon;
+  export const Heart: LucideIcon;
+  export const BookCheck: LucideIcon;
+  export const CheckCircle: LucideIcon;
+  export const BarChart2: LucideIcon;
+  export const Gamepad2: LucideIcon;
+  export const PlayCircle: LucideIcon;
+  export const FileText: LucideIcon;
+  export const Users: LucideIcon;
+  export const MessageSquare: LucideIcon;
+  export const GraduationCap: LucideIcon;
+  export const PenLine: LucideIcon;
+  export const HelpCircle: LucideIcon;
+  export const XCircle: LucideIcon;
+  export const BookOpenCheck: LucideIcon;
+  export const BookOpenText: LucideIcon;
 }
