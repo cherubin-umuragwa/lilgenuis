@@ -39,7 +39,7 @@ export function useGamification(): UseGamificationReturn {
   const streak = progress?.currentStreak ?? 0;
 
   // Lazy import of ACHIEVEMENTS to avoid circular deps at module level
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { ACHIEVEMENTS } = require("@/features/gamification/achievements") as {
     ACHIEVEMENTS: typeof import("@/features/gamification/achievements")["ACHIEVEMENTS"];
   };

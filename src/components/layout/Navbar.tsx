@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { LilGeniusLogo } from "@/components/characters/MascotSVG";
 import { cn } from "@/lib/utils/cn";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
 interface NavbarProps {
@@ -20,11 +21,11 @@ interface NavLink {
 
 function buildLinks(locale: Locale): NavLink[] {
   return [
-    { href: `/${locale}`, label: "Home" },
-    { href: `/${locale}/subjects`, label: "Subjects" },
-    { href: `/${locale}/explore`, label: "Explore" },
-    { href: `/${locale}/dashboard`, label: "Dashboard" },
-    { href: `/${locale}/challenges`, label: "Challenges" },
+    { href: ROUTES.home(locale), label: "Home" },
+    { href: ROUTES.subjects(locale), label: "Subjects" },
+    { href: ROUTES.explore(locale), label: "Explore" },
+    { href: ROUTES.dashboard(locale), label: "Dashboard" },
+    { href: ROUTES.challenges(locale), label: "Challenges" },
   ];
 }
 
@@ -45,7 +46,7 @@ export function Navbar({ locale }: NavbarProps) {
       >
         {/* Logo */}
         <Link
-          href={`/${locale}`}
+          href={ROUTES.home(locale)}
           className="flex items-center gap-2 font-heading font-bold text-xl text-primary"
           aria-label="LilGenius home"
         >
@@ -92,7 +93,7 @@ export function Navbar({ locale }: NavbarProps) {
           </Link>
 
           <Link
-            href={`/${locale}/register`}
+            href={ROUTES.onboarding(locale)}
             className="px-4 py-2 bg-primary text-white rounded-2xl text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Get Started
@@ -156,7 +157,7 @@ export function Navbar({ locale }: NavbarProps) {
                   {oppositeLocale.toUpperCase()}
                 </Link>
                 <Link
-                  href={`/${locale}/register`}
+                  href={ROUTES.onboarding(locale)}
                   onClick={() => setMenuOpen(false)}
                   className="flex-1 text-center px-4 py-2 bg-primary text-white rounded-2xl text-sm font-semibold"
                 >

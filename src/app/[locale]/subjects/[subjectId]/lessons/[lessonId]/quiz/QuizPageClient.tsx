@@ -9,6 +9,7 @@ import { PageTransition } from "@/components/shared/PageTransition";
 import { useProfile } from "@/hooks/useProfile";
 import { useGamification } from "@/hooks/useGamification";
 import { getLessonById } from "@/content/subjects/index";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale, Question, Answer } from "@/types";
 
 // Demo questions used when no real content exists for the lesson yet
@@ -90,7 +91,7 @@ export function QuizPageClient({
   if (lesson) {
     // Attempt to load questions from the subject module
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const subjectModule = require(`@/content/subjects/${subjectId}`) as {
         [key: string]: Question[];
       };
@@ -126,14 +127,14 @@ export function QuizPageClient({
     }
 
     setTimeout(() => {
-      router.push(`/${locale}/subjects/${subjectId}`);
+      router.push(ROUTES.subject(locale, subjectId));
     }, 2500);
   }
 
   return (
     <PageTransition className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
       <Link
-        href={`/${locale}/subjects/${subjectId}/lessons/${lessonId}`}
+        href={ROUTES.lesson(locale, subjectId, lessonId)}
         className="inline-flex items-center gap-2 text-text/50 hover:text-primary text-sm font-semibold mb-6 transition-colors"
       >
         <ArrowLeft size={16} />

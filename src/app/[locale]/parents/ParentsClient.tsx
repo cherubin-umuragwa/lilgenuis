@@ -56,7 +56,7 @@ export function ParentsClient({ locale }: ParentsClientProps) {
           For Parents
         </h1>
         <p className="text-text/60 text-xl max-w-xl mx-auto">
-          Everything you need to support your child's learning journey.
+          Everything you need to support your child&apos;s learning journey.
         </p>
       </div>
 

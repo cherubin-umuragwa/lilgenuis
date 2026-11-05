@@ -28,7 +28,7 @@ export function DailyChallengeBanner({
           </div>
           <h3 className="font-heading font-bold text-xl mb-1">{title}</h3>
           <p className="text-white/70 text-sm">
-            Complete today's challenge and earn{" "}
+            Complete today&apos;s challenge and earn{" "}
             <span className="text-yellow font-bold">+{bonusPoints} bonus XP</span>
           </p>
         </div>

@@ -1,8 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, type Variants } from "framer-motion";
 import { AchievementBadge } from "@/components/achievements/AchievementBadge";
+import { CelebrationAnimation } from "@/components/achievements/CelebrationAnimation";
 import { PageTransition } from "@/components/shared/PageTransition";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useProfile } from "@/hooks/useProfile";
 import { useProgress } from "@/hooks/useProgress";
 import { ACHIEVEMENTS } from "@/features/gamification/achievements";
@@ -13,9 +16,21 @@ interface AchievementsClientProps {
   locale: Locale;
 }
 
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06 } },
+};
+
+const badgeVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.85 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: "easeOut" } },
+};
+
 export function AchievementsClient({ locale }: AchievementsClientProps) {
   const { profile } = useProfile();
   const { progress } = useProgress(profile?.id ?? null);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const prevUnlockedCount = useRef<number | null>(null);
 
   const unlockedIds = new Set(progress?.achievements ?? []);
   const totalXP = profile?.level.totalXP ?? 0;
@@ -26,8 +41,20 @@ export function AchievementsClient({ locale }: AchievementsClientProps) {
   const xpPct = xpRequired > 0 ? Math.min(100, Math.round((currentXP / xpRequired) * 100)) : 100;
   const unlockedCount = ACHIEVEMENTS.filter((a) => unlockedIds.has(a.id)).length;
 
+  // Trigger celebration when a new achievement is unlocked
+  useEffect(() => {
+    if (prevUnlockedCount.current !== null && unlockedCount > prevUnlockedCount.current) {
+      setShowCelebration(true);
+    }
+    prevUnlockedCount.current = unlockedCount;
+  }, [unlockedCount]);
+
   return (
     <PageTransition className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {showCelebration && (
+        <CelebrationAnimation onDismiss={() => setShowCelebration(false)} />
+      )}
+
       <h1 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-2">
         Achievements
       </h1>
@@ -58,16 +85,30 @@ export function AchievementsClient({ locale }: AchievementsClientProps) {
       </div>
 
       {/* Badges grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {ACHIEVEMENTS.map((achievement) => (
-          <AchievementBadge
-            key={achievement.id}
-            achievement={achievement}
-            isUnlocked={unlockedIds.has(achievement.id)}
-            locale={locale}
-          />
-        ))}
-      </div>
+      {unlockedCount === 0 && progress !== null ? (
+        <EmptyState
+          title="No achievements yet"
+          description="Complete lessons and quizzes to start earning badges!"
+          illustration="no-achievements"
+        />
+      ) : (
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {ACHIEVEMENTS.map((achievement) => (
+            <motion.div key={achievement.id} variants={badgeVariants}>
+              <AchievementBadge
+                achievement={achievement}
+                isUnlocked={unlockedIds.has(achievement.id)}
+                locale={locale}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </PageTransition>
   );
 }

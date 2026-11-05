@@ -19,7 +19,7 @@ const DEFAULT_RECOMMENDATION = {
   duration: 10,
 };
 
-export function RecommendationsWidget({ locale, progress }: RecommendationsWidgetProps) {
+export function RecommendationsWidget({ locale }: RecommendationsWidgetProps) {
   // Find first subject with incomplete lessons, or fallback
   const rec = DEFAULT_RECOMMENDATION;
 

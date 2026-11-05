@@ -68,7 +68,7 @@ export function LessonViewer({ lesson, locale, subjectId }: LessonViewerProps) {
         return (
           <div>
             <h2 className="font-heading text-xl font-bold text-text mb-4">
-              Let's Learn
+              Let&apos;s Learn
             </h2>
             {lesson.content.length > 0 ? (
               lesson.content.filter((c) => c.type === "text").map((c, i) => (
@@ -106,7 +106,7 @@ export function LessonViewer({ lesson, locale, subjectId }: LessonViewerProps) {
             <div className="bg-yellow/10 border border-yellow/30 rounded-2xl p-5 mb-4">
               <p className="font-semibold text-text mb-2">Example</p>
               <p className="text-text/70 text-base leading-relaxed">
-                Let's walk through a concrete example together. Pay attention to
+                Let&apos;s walk through a concrete example together. Pay attention to
                 each step and think about how it connects to what you just learned.
               </p>
             </div>
@@ -126,7 +126,7 @@ export function LessonViewer({ lesson, locale, subjectId }: LessonViewerProps) {
               Practice Time
             </h2>
             <p className="text-text/70 text-base leading-relaxed mb-5">
-              Now it's your chance to practice what you have learned. Try the
+              Now it&apos;s your chance to practice what you have learned. Try the
               exercises below and remember — mistakes are how we grow!
             </p>
             <div className="space-y-3">

@@ -17,7 +17,7 @@ export default function NotFound() {
 
       <p className="text-text/60 text-base max-w-sm mb-8">
         Oops! The page you are looking for does not exist or has been moved.
-        Let's get you back on track.
+        Let&apos;s get you back on track.
       </p>
 
       <Link

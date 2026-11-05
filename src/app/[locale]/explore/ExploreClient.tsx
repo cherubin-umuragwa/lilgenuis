@@ -5,11 +5,13 @@ import Link from "next/link";
 import { Search, Clock } from "lucide-react";
 import { SubjectIcon } from "@/components/shared/SubjectIcon";
 import { PageTransition } from "@/components/shared/PageTransition";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale, Subject } from "@/types";
 
 let subjects: Subject[] = [];
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   subjects = require("@/content/subjects/index").default ?? [];
 } catch {
   subjects = [];
@@ -114,9 +116,11 @@ export function ExploreClient({ locale }: ExploreClientProps) {
 
       {/* Results */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 text-text/40">
-          No lessons found. Try a different search.
-        </div>
+        <EmptyState
+          title="No lessons found"
+          description="Try a different search term or adjust the filters."
+          illustration="no-results"
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((activity) => (
@@ -146,7 +150,7 @@ export function ExploreClient({ locale }: ExploreClientProps) {
                 </span>
               </div>
               <Link
-                href={`/${locale}/subjects/${activity.subjectId}/lessons/${activity.id}`}
+                href={ROUTES.lesson(locale, activity.subjectId, activity.id)}
                 className="w-full text-center py-2 bg-primary text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Start

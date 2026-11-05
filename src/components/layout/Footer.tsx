@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { LilGeniusLogo } from "@/components/characters/MascotSVG";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
 interface FooterProps {
@@ -11,21 +12,21 @@ const currentYear = new Date().getFullYear();
 
 export function Footer({ locale }: FooterProps) {
   const learn = [
-    { label: "Subjects", href: `/${locale}/subjects` },
-    { label: "Explore", href: `/${locale}/explore` },
-    { label: "Dashboard", href: `/${locale}/dashboard` },
-    { label: "Daily Challenges", href: `/${locale}/challenges` },
+    { label: "Subjects", href: ROUTES.subjects(locale) },
+    { label: "Explore", href: ROUTES.explore(locale) },
+    { label: "Dashboard", href: ROUTES.dashboard(locale) },
+    { label: "Daily Challenges", href: ROUTES.challenges(locale) },
   ];
 
   const info = [
-    { label: "About LilGenius", href: `/${locale}/about` },
-    { label: "For Parents", href: `/${locale}/parents` },
-    { label: "For Teachers", href: `/${locale}/teachers` },
+    { label: "About LilGenius", href: ROUTES.about(locale) },
+    { label: "For Parents", href: ROUTES.parents(locale) },
+    { label: "For Teachers", href: ROUTES.teachers(locale) },
   ];
 
   const account = [
-    { label: "Log In", href: `/${locale}/login` },
-    { label: "Get Started", href: `/${locale}/register` },
+    { label: "Log In", href: ROUTES.login(locale) },
+    { label: "Get Started", href: ROUTES.onboarding(locale) },
   ];
 
   return (
@@ -35,7 +36,7 @@ export function Footer({ locale }: FooterProps) {
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link
-              href={`/${locale}`}
+              href={ROUTES.home(locale)}
               className="flex items-center gap-2 font-heading font-bold text-xl text-white"
               aria-label="LilGenius home"
             >
@@ -53,7 +54,7 @@ export function Footer({ locale }: FooterProps) {
             {/* Language selector */}
             <div className="mt-4 flex items-center gap-2">
               <Link
-                href={`/en${locale === "en" ? "" : ""}`}
+                href={ROUTES.home("en")}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
                   locale === "en"
                     ? "border-white/60 text-white bg-white/10"
@@ -64,7 +65,7 @@ export function Footer({ locale }: FooterProps) {
                 EN
               </Link>
               <Link
-                href={`/fr`}
+                href={ROUTES.home("fr")}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
                   locale === "fr"
                     ? "border-white/60 text-white bg-white/10"

@@ -8,6 +8,7 @@ import {
   ScientistMascot,
   ArtistMascot,
 } from "@/components/characters/MascotSVG";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
 interface HeroSectionProps {
@@ -79,13 +80,13 @@ export function HeroSection({ locale }: HeroSectionProps) {
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
             <Link
-              href={`/${locale}/onboarding`}
+              href={ROUTES.onboarding(locale)}
               className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white rounded-2xl font-semibold text-lg hover:opacity-90 transition-opacity shadow-lg shadow-primary/30"
             >
               Start Learning Free
             </Link>
             <Link
-              href={`/${locale}/subjects`}
+              href={ROUTES.subjects(locale)}
               className="inline-flex items-center justify-center px-8 py-4 border-2 border-primary text-primary rounded-2xl font-semibold text-lg hover:bg-primary/10 transition-colors"
             >
               Explore Subjects

@@ -305,7 +305,7 @@ export function OnboardingWizard({ locale }: OnboardingWizardProps) {
                 {step === 6 && (
                   <div>
                     <h2 className="font-heading text-xl font-bold text-text mb-6">
-                      What's your name?
+                      What&apos;s your name?
                     </h2>
                     <input
                       type="text"
@@ -331,7 +331,7 @@ export function OnboardingWizard({ locale }: OnboardingWizardProps) {
                       </div>
                     )}
                     <h2 className="font-heading text-2xl font-bold text-text">
-                      You're all set, {name.trim() || "Explorer"}!
+                      You&apos;re all set, {name.trim() || "Explorer"}!
                     </h2>
                     <p className="text-text/60 text-sm">
                       Language: <strong>{language === "en" ? "English" : "Français"}</strong>
@@ -377,7 +377,7 @@ export function OnboardingWizard({ locale }: OnboardingWizardProps) {
                 onClick={finish}
                 className="flex-1 px-4 py-3 bg-primary text-white rounded-2xl font-semibold hover:opacity-90 transition-opacity"
               >
-                Let's Go!
+                Let&apos;s Go!
               </button>
             )}
           </div>

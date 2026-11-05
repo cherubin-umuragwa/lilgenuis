@@ -4,10 +4,13 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Flame, CheckCircle, Clock } from "lucide-react";
 import { PageTransition } from "@/components/shared/PageTransition";
+import { LoadingState } from "@/components/ui/LoadingState";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useProfile } from "@/hooks/useProfile";
 import { useProgress } from "@/hooks/useProgress";
 import { dailyChallenges } from "@/content/challenges/daily-challenges";
 import { getDailyChallengeIndex } from "@/lib/utils/date";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
 interface ChallengesClientProps {
@@ -17,29 +20,28 @@ interface ChallengesClientProps {
 export function ChallengesClient({ locale }: ChallengesClientProps) {
   const { profile } = useProfile();
   const { progress } = useProgress(profile?.id ?? null);
+  // null until the component mounts on the client (avoids prerender date access)
   const [todayIndex, setTodayIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    // Must run client-side only — getDailyChallengeIndex calls new Date()
+    // which cannot be called during Next.js prerender.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTodayIndex(getDailyChallengeIndex(dailyChallenges.length));
   }, []);
 
   const streak = progress?.currentStreak ?? 0;
   const completed = progress?.dailyChallengesCompleted ?? [];
 
-  const todayChallenge =
-    todayIndex !== null ? dailyChallenges[todayIndex] : null;
-
-  const todayDone = todayChallenge
-    ? completed.includes(todayChallenge.id)
-    : false;
+  // todayIndex is null during SSR/first render — show loading until it resolves
+  const todayChallenge = todayIndex !== null ? (dailyChallenges[todayIndex] ?? null) : null;
+  const todayDone = todayChallenge ? completed.includes(todayChallenge.id) : false;
 
   // Build "past challenges" from the two entries before today's index
   const pastChallenges =
     todayIndex !== null
       ? [1, 2].map((offset) => {
-          const idx =
-            (todayIndex - offset + dailyChallenges.length) %
-            dailyChallenges.length;
+          const idx = (todayIndex - offset + dailyChallenges.length) % dailyChallenges.length;
           const challenge = dailyChallenges[idx];
           return {
             title: locale === "fr" ? challenge.titleFr : challenge.titleEn,
@@ -49,6 +51,28 @@ export function ChallengesClient({ locale }: ChallengesClientProps) {
           };
         })
       : [];
+
+  // Show empty state if no challenges are configured
+  if (dailyChallenges.length === 0) {
+    return (
+      <PageTransition className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <EmptyState
+          title="No challenges yet"
+          description="Daily challenges will appear here once they are ready."
+          illustration="no-content"
+        />
+      </PageTransition>
+    );
+  }
+
+  // Show loading while todayIndex hasn't been resolved on the client yet
+  if (todayIndex === null) {
+    return (
+      <PageTransition className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <LoadingState message="Loading today's challenge…" />
+      </PageTransition>
+    );
+  }
 
   return (
     <PageTransition className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8">
@@ -78,9 +102,7 @@ export function ChallengesClient({ locale }: ChallengesClientProps) {
                 Today&apos;s Challenge
               </p>
               <h2 className="font-heading text-xl font-bold mb-2">
-                {locale === "fr"
-                  ? todayChallenge.titleFr
-                  : todayChallenge.titleEn}
+                {locale === "fr" ? todayChallenge.titleFr : todayChallenge.titleEn}
               </h2>
               <p className="text-white/80 text-sm mb-4 max-w-sm">
                 {todayChallenge.description}
@@ -102,7 +124,7 @@ export function ChallengesClient({ locale }: ChallengesClientProps) {
               </div>
             ) : (
               <Link
-                href={`/${locale}/subjects/${todayChallenge.subjectId}`}
+                href={ROUTES.subject(locale, todayChallenge.subjectId)}
                 className="shrink-0 px-5 py-2.5 bg-white text-primary rounded-2xl font-semibold text-sm hover:bg-white/90 transition-colors shadow"
               >
                 Take Challenge

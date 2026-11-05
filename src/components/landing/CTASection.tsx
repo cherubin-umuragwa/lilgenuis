@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
 interface CTASectionProps {
@@ -28,13 +29,13 @@ export function CTASection({ locale }: CTASectionProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href={`/${locale}/onboarding`}
+              href={ROUTES.onboarding(locale)}
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary rounded-2xl font-semibold text-lg hover:bg-white/90 transition-colors shadow-lg"
             >
               Get Started Free
             </Link>
             <Link
-              href={`/${locale}/about`}
+              href={ROUTES.about(locale)}
               className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/50 text-white rounded-2xl font-semibold text-lg hover:bg-white/10 transition-colors"
             >
               Learn More

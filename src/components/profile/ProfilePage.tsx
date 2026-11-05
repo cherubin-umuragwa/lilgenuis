@@ -16,7 +16,7 @@ import type { Locale, CharacterType, Subject } from "@/types";
 
 let subjects: Subject[] = [];
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   subjects = require("@/content/subjects/index").default ?? [];
 } catch {
   subjects = [];
@@ -152,7 +152,14 @@ export function ProfilePage({ locale: _locale }: ProfilePageProps) {
                     <Lock size={12} className="text-text/30" />
                   </div>
                 )}
-                <Mascot className="w-14 h-14" />
+                <motion.div
+                  key={`${option.id}-${isActive}`}
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                >
+                  <Mascot className="w-14 h-14" />
+                </motion.div>
                 <span className="font-heading font-bold text-text text-xs capitalize">
                   {option.nameEn}
                 </span>

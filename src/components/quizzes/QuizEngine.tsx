@@ -29,7 +29,7 @@ function feedbackMessage(pct: number): string {
   return "Keep practising — you're improving every time!";
 }
 
-export function QuizEngine({ questions, lessonId, locale, onComplete }: QuizEngineProps) {
+export function QuizEngine({ questions, lessonId: _lessonId, locale, onComplete }: QuizEngineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [lastAnswer, setLastAnswer] = useState<{ isCorrect: boolean; explanation?: string } | null>(null);
@@ -109,11 +109,6 @@ export function QuizEngine({ questions, lessonId, locale, onComplete }: QuizEngi
     );
   }
 
-  const questionText =
-    locale === "fr" && currentQuestion.questionFr
-      ? currentQuestion.questionFr
-      : currentQuestion.questionEn;
-
   return (
     <div>
       {/* Header */}
@@ -181,9 +176,10 @@ export function QuizEngine({ questions, lessonId, locale, onComplete }: QuizEngi
       <AnimatePresence>
         {showFeedback && lastAnswer && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: 8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className={`rounded-2xl p-4 mb-4 flex items-start gap-3 ${
               lastAnswer.isCorrect
                 ? "bg-mint/10 border border-mint/30"

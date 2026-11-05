@@ -8,8 +8,12 @@ import { DailyChallengeBanner } from "@/components/dashboard/DailyChallengeBanne
 import { AchievementsPreview } from "@/components/dashboard/AchievementsPreview";
 import { RecommendationsWidget } from "@/components/dashboard/RecommendationsWidget";
 import { PageTransition } from "@/components/shared/PageTransition";
+import { LoadingState } from "@/components/ui/LoadingState";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useProfile } from "@/hooks/useProfile";
 import { useProgress } from "@/hooks/useProgress";
+import { ROUTES } from "@/lib/utils/routes";
+import { useRouter } from "next/navigation";
 import type { Locale } from "@/types";
 
 interface DashboardClientProps {
@@ -17,24 +21,46 @@ interface DashboardClientProps {
 }
 
 export function DashboardClient({ locale }: DashboardClientProps) {
-  const { profile } = useProfile();
+  const { profile, isLoading } = useProfile();
   const { progress } = useProgress(profile?.id ?? null);
-  const [dailyCompleted, setDailyCompleted] = useState(0);
+  const router = useRouter();
 
+  // today must be computed client-side only — new Date() cannot run during prerender
+  const [dailyCompleted, setDailyCompleted] = useState(0);
   useEffect(() => {
-    // Count lessons completed today by checking each subject's lastStudied date
+    if (!progress) return;
     const today = new Date().toISOString().slice(0, 10);
     let todayCount = 0;
-    if (progress) {
-      for (const sp of Object.values(progress.subjectProgress)) {
-        if (sp.lastStudied === today) {
-          // Approximation: each subject studied today contributes its completed count
-          todayCount += 1;
-        }
-      }
+    for (const sp of Object.values(progress.subjectProgress)) {
+      if (sp.lastStudied === today) todayCount += 1;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDailyCompleted(Math.min(todayCount, 5));
   }, [progress]);
+
+  if (isLoading) {
+    return (
+      <PageTransition className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <LoadingState message="Loading your dashboard…" />
+      </PageTransition>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <PageTransition className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <EmptyState
+          title="No profile yet"
+          description="Complete the quick onboarding to set up your learning profile."
+          illustration="start-learning"
+          action={{
+            label: "Get Started",
+            onClick: () => router.push(ROUTES.onboarding(locale)),
+          }}
+        />
+      </PageTransition>
+    );
+  }
 
   return (
     <PageTransition className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">

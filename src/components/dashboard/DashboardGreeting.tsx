@@ -18,6 +18,8 @@ export function DashboardGreeting() {
   const [greeting, setGreeting] = useState("Good morning");
 
   useEffect(() => {
+    // Must run client-side only — getTimeOfDay calls new Date()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setGreeting(getTimeOfDay());
   }, []);
 

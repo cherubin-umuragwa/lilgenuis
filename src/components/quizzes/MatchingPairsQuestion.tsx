@@ -26,7 +26,10 @@ export function MatchingPairsQuestion({
   const options = question.options ?? [];
   const pairs = parsePairs(options);
   const lefts = pairs.map((p) => p.left);
-  const rights = pairs.map((p) => p.right).sort(() => Math.random() - 0.5);
+  // Shuffle once on mount — keeps ordering stable across re-renders
+  const [rights] = useState<string[]>(() =>
+    pairs.map((p) => p.right).sort(() => Math.random() - 0.5)
+  );
 
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [matched, setMatched] = useState<Record<string, string>>({});
