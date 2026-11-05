@@ -1,126 +1,38 @@
-import type { Subject } from "@/types";
+import { mathematics } from './mathematics';
+import { science } from './science';
+import { geography } from './geography';
+import { history } from './history';
+import { languages } from './languages';
+import { generalKnowledge } from './general-knowledge';
+import { logic } from './logic';
+import { programming } from './programming';
+import type { Subject, Lesson } from '@/types';
 
-const subjects: Subject[] = [
-  {
-    id: "mathematics",
-    name: "Mathematics",
-    nameEn: "Mathematics",
-    nameFr: "Mathématiques",
-    description: "Numbers, shapes, patterns and problem-solving adventures.",
-    descriptionEn: "Numbers, shapes, patterns and problem-solving adventures.",
-    descriptionFr: "Nombres, formes, schémas et aventures de résolution de problèmes.",
-    icon: "Calculator",
-    color: "text-primary",
-    bgColor: "bg-primary/10",
-    lessons: [],
-    totalLessons: 12,
-    estimatedMinutes: 180,
-  },
-  {
-    id: "science",
-    name: "Science",
-    nameEn: "Science",
-    nameFr: "Sciences",
-    description: "Explore the natural world through experiments and discoveries.",
-    descriptionEn: "Explore the natural world through experiments and discoveries.",
-    descriptionFr: "Explorez le monde naturel à travers des expériences et des découvertes.",
-    icon: "FlaskConical",
-    color: "text-turquoise",
-    bgColor: "bg-turquoise/10",
-    lessons: [],
-    totalLessons: 10,
-    estimatedMinutes: 150,
-  },
-  {
-    id: "geography",
-    name: "Geography",
-    nameEn: "Geography",
-    nameFr: "Géographie",
-    description: "Discover countries, continents, rivers and cultures of the world.",
-    descriptionEn: "Discover countries, continents, rivers and cultures of the world.",
-    descriptionFr: "Découvrez les pays, continents, fleuves et cultures du monde.",
-    icon: "Globe",
-    color: "text-blue",
-    bgColor: "bg-blue/10",
-    lessons: [],
-    totalLessons: 8,
-    estimatedMinutes: 120,
-  },
-  {
-    id: "history",
-    name: "History",
-    nameEn: "History",
-    nameFr: "Histoire",
-    description: "Journey through time and learn about civilisations and great events.",
-    descriptionEn: "Journey through time and learn about civilisations and great events.",
-    descriptionFr: "Voyagez dans le temps et découvrez les civilisations et les grands événements.",
-    icon: "BookOpen",
-    color: "text-coral",
-    bgColor: "bg-coral/10",
-    lessons: [],
-    totalLessons: 9,
-    estimatedMinutes: 135,
-  },
-  {
-    id: "languages",
-    name: "Languages",
-    nameEn: "Languages",
-    nameFr: "Langues",
-    description: "Read, write and communicate in English, French and more.",
-    descriptionEn: "Read, write and communicate in English, French and more.",
-    descriptionFr: "Lisez, écrivez et communiquez en anglais, français et plus.",
-    icon: "MessageSquare",
-    color: "text-pink",
-    bgColor: "bg-pink/10",
-    lessons: [],
-    totalLessons: 11,
-    estimatedMinutes: 165,
-  },
-  {
-    id: "general-knowledge",
-    name: "General Knowledge",
-    nameEn: "General Knowledge",
-    nameFr: "Culture Générale",
-    description: "Fascinating facts about the world around us.",
-    descriptionEn: "Fascinating facts about the world around us.",
-    descriptionFr: "Des faits fascinants sur le monde qui nous entoure.",
-    icon: "Lightbulb",
-    color: "text-yellow",
-    bgColor: "bg-yellow/10",
-    lessons: [],
-    totalLessons: 7,
-    estimatedMinutes: 105,
-  },
-  {
-    id: "logic",
-    name: "Logic & Reasoning",
-    nameEn: "Logic & Reasoning",
-    nameFr: "Logique et Raisonnement",
-    description: "Puzzles, riddles and brain challenges to sharpen your thinking.",
-    descriptionEn: "Puzzles, riddles and brain challenges to sharpen your thinking.",
-    descriptionFr: "Puzzles, devinettes et défis cérébraux pour aiguiser votre réflexion.",
-    icon: "Brain",
-    color: "text-mint",
-    bgColor: "bg-mint/10",
-    lessons: [],
-    totalLessons: 8,
-    estimatedMinutes: 120,
-  },
-  {
-    id: "programming",
-    name: "Programming",
-    nameEn: "Programming",
-    nameFr: "Programmation",
-    description: "Introduction to computational thinking and coding basics.",
-    descriptionEn: "Introduction to computational thinking and coding basics.",
-    descriptionFr: "Introduction à la pensée computationnelle et aux bases du codage.",
-    icon: "Code",
-    color: "text-primary",
-    bgColor: "bg-primary/10",
-    lessons: [],
-    totalLessons: 6,
-    estimatedMinutes: 90,
-  },
+export const allSubjects: Subject[] = [
+  mathematics, science, geography, history, languages, generalKnowledge, logic, programming,
 ];
 
-export default subjects;
+export function getSubjectById(id: string): Subject | undefined {
+  return allSubjects.find(s => s.id === id);
+}
+
+export function getLessonsBySubject(subjectId: string): Lesson[] {
+  return getSubjectById(subjectId)?.lessons ?? [];
+}
+
+export function getLessonById(subjectId: string, lessonId: string): Lesson | undefined {
+  return getLessonsBySubject(subjectId).find(l => l.id === lessonId);
+}
+
+export {
+  mathematics,
+  science,
+  geography,
+  history,
+  languages,
+  generalKnowledge,
+  logic,
+  programming,
+};
+
+export default allSubjects;
