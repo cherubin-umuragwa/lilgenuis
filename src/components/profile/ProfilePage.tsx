@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Lock } from "lucide-react";
 import {
   ExplorerMascot,
   ScientistMascot,
@@ -10,6 +11,7 @@ import {
 import { useProfile } from "@/hooks/useProfile";
 import { useProgress } from "@/hooks/useProgress";
 import { SubjectIcon } from "@/components/shared/SubjectIcon";
+import { CHARACTER_OPTIONS } from "@/features/gamification/characters";
 import type { Locale, CharacterType, Subject } from "@/types";
 
 let subjects: Subject[] = [];
@@ -51,13 +53,14 @@ export function ProfilePage({ locale: _locale }: ProfilePageProps) {
   const totalXP = profile.level.totalXP;
   const currentXP = profile.level.currentXP;
   const xpRequired = profile.level.xpRequired;
-  const xpPct = xpRequired > 0 ? Math.min(100, Math.round((currentXP / xpRequired) * 100)) : 0;
+  const xpPct =
+    xpRequired > 0
+      ? Math.min(100, Math.round((currentXP / xpRequired) * 100))
+      : 100;
 
   function switchCharacter(c: CharacterType) {
     updateProfile({ character: c });
   }
-
-  const characters: CharacterType[] = ["explorer", "scientist", "artist"];
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-6">
@@ -77,12 +80,12 @@ export function ProfilePage({ locale: _locale }: ProfilePageProps) {
           <p className="text-primary font-semibold text-sm mt-1">
             Level {profile.level.current} — {profile.level.title}
           </p>
-          <p className="text-text/40 text-xs mt-0.5">
-            {totalXP} total XP
-          </p>
+          <p className="text-text/40 text-xs mt-0.5">{totalXP} total XP</p>
           <div className="mt-3">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-text/50">{currentXP}/{xpRequired} XP to next level</span>
+              <span className="text-xs text-text/50">
+                {currentXP}/{xpRequired > 0 ? xpRequired : "MAX"} XP to next level
+              </span>
             </div>
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
@@ -108,29 +111,56 @@ export function ProfilePage({ locale: _locale }: ProfilePageProps) {
             <span className="font-heading text-2xl font-bold text-primary">
               {stat.value}
             </span>
-            <span className="text-text/50 text-xs text-center">{stat.label}</span>
+            <span className="text-text/50 text-xs text-center">
+              {stat.label}
+            </span>
           </div>
         ))}
       </div>
 
       {/* Character customisation */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <h2 className="font-heading font-bold text-text mb-4">Change Character</h2>
+        <h2 className="font-heading font-bold text-text mb-4">
+          Change Character
+        </h2>
         <div className="grid grid-cols-3 gap-3">
-          {characters.map((c) => {
-            const Mascot = mascotMap[c];
+          {CHARACTER_OPTIONS.map((option) => {
+            const Mascot = mascotMap[option.id];
+            const isUnlocked = totalXP >= option.xpRequired;
+            const isActive = profile.character === option.id;
+
             return (
               <button
-                key={c}
-                onClick={() => switchCharacter(c)}
-                className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
-                  profile.character === c
+                key={option.id}
+                onClick={() => isUnlocked && switchCharacter(option.id)}
+                disabled={!isUnlocked}
+                aria-label={
+                  isUnlocked
+                    ? `Select ${option.nameEn}`
+                    : `${option.nameEn} — ${option.unlockCondition}`
+                }
+                className={`relative p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
+                  isActive
                     ? "border-primary bg-primary/10"
-                    : "border-gray-200 hover:border-primary/40"
+                    : isUnlocked
+                    ? "border-gray-200 hover:border-primary/40 cursor-pointer"
+                    : "border-gray-100 bg-gray-50 cursor-not-allowed opacity-60"
                 }`}
               >
+                {!isUnlocked && (
+                  <div className="absolute top-2 right-2">
+                    <Lock size={12} className="text-text/30" />
+                  </div>
+                )}
                 <Mascot className="w-14 h-14" />
-                <span className="font-heading font-bold text-text text-xs capitalize">{c}</span>
+                <span className="font-heading font-bold text-text text-xs capitalize">
+                  {option.nameEn}
+                </span>
+                {!isUnlocked && (
+                  <span className="text-text/40 text-xs text-center leading-tight">
+                    {option.unlockCondition}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -140,13 +170,17 @@ export function ProfilePage({ locale: _locale }: ProfilePageProps) {
       {/* Subject completion */}
       {subjects.length > 0 && (
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="font-heading font-bold text-text mb-4">Subject Progress</h2>
+          <h2 className="font-heading font-bold text-text mb-4">
+            Subject Progress
+          </h2>
           <div className="space-y-3">
             {subjects.map((subject) => {
               const completed =
-                progress?.subjectProgress[subject.id]?.lessonsCompleted.length ?? 0;
+                progress?.subjectProgress[subject.id]?.lessonsCompleted
+                  .length ?? 0;
               const total = subject.totalLessons;
-              const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+              const pct =
+                total > 0 ? Math.round((completed / total) * 100) : 0;
               return (
                 <div key={subject.id} className="flex items-center gap-3">
                   <SubjectIcon subjectId={subject.id} size={18} />

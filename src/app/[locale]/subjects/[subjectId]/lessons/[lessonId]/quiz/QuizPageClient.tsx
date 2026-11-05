@@ -1,23 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { QuizEngine } from "@/components/quizzes/QuizEngine";
+import { QuizEngine as QuizEngineComponent } from "@/components/quizzes/QuizEngine";
 import { PageTransition } from "@/components/shared/PageTransition";
 import { useProfile } from "@/hooks/useProfile";
-import { useProgress } from "@/hooks/useProgress";
-import type { Locale, Question } from "@/types";
+import { useGamification } from "@/hooks/useGamification";
+import { getLessonById } from "@/content/subjects/index";
+import type { Locale, Question, Answer } from "@/types";
 
-// Demo questions when no real content exists yet
+// Demo questions used when no real content exists for the lesson yet
 const demoQuestions: Question[] = [
   {
     id: "q1",
     lessonId: "",
     type: "multiple-choice",
     questionEn: "Which of the following best describes learning?",
-    questionFr: "Lequel des éléments suivants décrit le mieux l'apprentissage?",
+    questionFr:
+      "Lequel des éléments suivants décrit le mieux l'apprentissage?",
     options: [
       "Reading without thinking",
       "Gaining new knowledge and skills",
@@ -25,8 +27,10 @@ const demoQuestions: Question[] = [
       "Avoiding challenges",
     ],
     correctAnswer: "Gaining new knowledge and skills",
-    explanationEn: "Learning means actively gaining new knowledge, skills, and understanding.",
-    explanationFr: "Apprendre signifie acquérir activement de nouvelles connaissances, compétences et compréhension.",
+    explanationEn:
+      "Learning means actively gaining new knowledge, skills, and understanding.",
+    explanationFr:
+      "Apprendre signifie acquérir activement de nouvelles connaissances, compétences et compréhension.",
     points: 10,
   },
   {
@@ -34,11 +38,14 @@ const demoQuestions: Question[] = [
     lessonId: "",
     type: "true-false",
     questionEn: "Making mistakes is a natural part of the learning process.",
-    questionFr: "Faire des erreurs fait naturellement partie du processus d'apprentissage.",
+    questionFr:
+      "Faire des erreurs fait naturellement partie du processus d'apprentissage.",
     options: [],
     correctAnswer: "true",
-    explanationEn: "Mistakes help us understand what we need to improve and learn from experience.",
-    explanationFr: "Les erreurs nous aident à comprendre ce que nous devons améliorer.",
+    explanationEn:
+      "Mistakes help us understand what we need to improve and learn from experience.",
+    explanationFr:
+      "Les erreurs nous aident à comprendre ce que nous devons améliorer.",
     points: 10,
   },
   {
@@ -50,7 +57,8 @@ const demoQuestions: Question[] = [
     options: [],
     correctAnswer: "Paris",
     explanationEn: "Paris is the capital and largest city of France.",
-    explanationFr: "Paris est la capitale et la plus grande ville de France.",
+    explanationFr:
+      "Paris est la capitale et la plus grande ville de France.",
     points: 10,
   },
 ];
@@ -61,18 +69,62 @@ interface QuizPageClientProps {
   lessonId: string;
 }
 
-export function QuizPageClient({ locale, subjectId, lessonId }: QuizPageClientProps) {
+export function QuizPageClient({
+  locale,
+  subjectId,
+  lessonId,
+}: QuizPageClientProps) {
   const router = useRouter();
   const { profile } = useProfile();
-  const { addPoints, completedLesson } = useProgress(profile?.id ?? null);
+  const { processLessonCompletion } = useGamification();
+  const hasCompletedRef = useRef(false);
 
-  const questions = demoQuestions.map((q) => ({ ...q, lessonId }));
+  const lesson = getLessonById(subjectId, lessonId);
+  const questions = (lesson ? [] : demoQuestions).map((q) => ({
+    ...q,
+    lessonId,
+  }));
 
-  function handleComplete(score: number) {
-    if (profile?.id) {
-      addPoints(score);
-      completedLesson(subjectId, lessonId);
+  // If the subject has real questions, try to get them from content
+  let resolvedQuestions = questions;
+  if (lesson) {
+    // Attempt to load questions from the subject module
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const subjectModule = require(`@/content/subjects/${subjectId}`) as {
+        [key: string]: Question[];
+      };
+      const allQuestions: Question[] = Object.values(subjectModule)
+        .flat()
+        .filter((v): v is Question => typeof v === "object" && "lessonId" in v);
+      const lessonQuestions = allQuestions.filter(
+        (q) => q.lessonId === lessonId
+      );
+      resolvedQuestions =
+        lessonQuestions.length > 0 ? lessonQuestions : demoQuestions;
+    } catch {
+      resolvedQuestions = demoQuestions;
     }
+  }
+
+  function handleComplete(score: number, answers: Answer[]) {
+    if (hasCompletedRef.current) return;
+    hasCompletedRef.current = true;
+
+    const correctAnswers = answers.filter((a) => a.isCorrect).length;
+    const totalQuestions = answers.length;
+
+    if (profile?.id) {
+      processLessonCompletion({
+        lessonId,
+        subjectId,
+        difficulty: lesson?.difficulty ?? "beginner",
+        quizScore: score,
+        correctAnswers,
+        totalQuestions,
+      });
+    }
+
     setTimeout(() => {
       router.push(`/${locale}/subjects/${subjectId}`);
     }, 2500);
@@ -92,8 +144,8 @@ export function QuizPageClient({ locale, subjectId, lessonId }: QuizPageClientPr
         Lesson Quiz
       </h1>
 
-      <QuizEngine
-        questions={questions}
+      <QuizEngineComponent
+        questions={resolvedQuestions}
         lessonId={lessonId}
         locale={locale}
         onComplete={handleComplete}

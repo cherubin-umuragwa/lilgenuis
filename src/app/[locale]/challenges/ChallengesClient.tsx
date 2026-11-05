@@ -1,28 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Flame, CheckCircle, Clock } from "lucide-react";
 import { PageTransition } from "@/components/shared/PageTransition";
 import { useProfile } from "@/hooks/useProfile";
 import { useProgress } from "@/hooks/useProgress";
+import { dailyChallenges } from "@/content/challenges/daily-challenges";
+import { getDailyChallengeIndex } from "@/lib/utils/date";
 import type { Locale } from "@/types";
-
-const TODAY_CHALLENGE = {
-  id: "challenge_today",
-  title: "Math Sprint",
-  subject: "Mathematics",
-  description:
-    "Answer 5 math questions as quickly as you can and earn bonus XP for today.",
-  bonusPoints: 100,
-  duration: 8,
-};
-
-const PAST_CHALLENGES = [
-  { date: "Yesterday", title: "Science Explorer", subject: "Science", completed: true },
-  { date: "2 days ago", title: "Geography Quest", subject: "Geography", completed: true },
-  { date: "3 days ago", title: "Language Challenge", subject: "Languages", completed: false },
-];
 
 interface ChallengesClientProps {
   locale: Locale;
@@ -31,10 +17,38 @@ interface ChallengesClientProps {
 export function ChallengesClient({ locale }: ChallengesClientProps) {
   const { profile } = useProfile();
   const { progress } = useProgress(profile?.id ?? null);
+  const [todayIndex, setTodayIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    setTodayIndex(getDailyChallengeIndex(dailyChallenges.length));
+  }, []);
 
   const streak = progress?.currentStreak ?? 0;
   const completed = progress?.dailyChallengesCompleted ?? [];
-  const todayDone = completed.includes(TODAY_CHALLENGE.id);
+
+  const todayChallenge =
+    todayIndex !== null ? dailyChallenges[todayIndex] : null;
+
+  const todayDone = todayChallenge
+    ? completed.includes(todayChallenge.id)
+    : false;
+
+  // Build "past challenges" from the two entries before today's index
+  const pastChallenges =
+    todayIndex !== null
+      ? [1, 2].map((offset) => {
+          const idx =
+            (todayIndex - offset + dailyChallenges.length) %
+            dailyChallenges.length;
+          const challenge = dailyChallenges[idx];
+          return {
+            title: locale === "fr" ? challenge.titleFr : challenge.titleEn,
+            subject: challenge.subjectId,
+            completed: completed.includes(challenge.id),
+            daysAgo: offset === 1 ? "Yesterday" : "2 days ago",
+          };
+        })
+      : [];
 
   return (
     <PageTransition className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8">
@@ -56,43 +70,47 @@ export function ChallengesClient({ locale }: ChallengesClientProps) {
       </div>
 
       {/* Today's challenge */}
-      <div className="bg-gradient-to-r from-primary to-blue rounded-3xl p-7 text-white">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-white/70 text-sm font-semibold mb-1">
-              Today's Challenge
-            </p>
-            <h2 className="font-heading text-xl font-bold mb-2">
-              {TODAY_CHALLENGE.title}
-            </h2>
-            <p className="text-white/80 text-sm mb-4 max-w-sm">
-              {TODAY_CHALLENGE.description}
-            </p>
-            <div className="flex items-center gap-3">
-              <span className="bg-white/20 px-3 py-1 rounded-lg text-xs font-semibold">
-                +{TODAY_CHALLENGE.bonusPoints} XP
-              </span>
-              <span className="flex items-center gap-1 text-white/60 text-xs">
-                <Clock size={12} />
-                {TODAY_CHALLENGE.duration} min
-              </span>
+      {todayChallenge && (
+        <div className="bg-gradient-to-r from-primary to-blue rounded-3xl p-7 text-white">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-white/70 text-sm font-semibold mb-1">
+                Today&apos;s Challenge
+              </p>
+              <h2 className="font-heading text-xl font-bold mb-2">
+                {locale === "fr"
+                  ? todayChallenge.titleFr
+                  : todayChallenge.titleEn}
+              </h2>
+              <p className="text-white/80 text-sm mb-4 max-w-sm">
+                {todayChallenge.description}
+              </p>
+              <div className="flex items-center gap-3">
+                <span className="bg-white/20 px-3 py-1 rounded-lg text-xs font-semibold">
+                  +{todayChallenge.bonusPoints} XP
+                </span>
+                <span className="flex items-center gap-1 text-white/60 text-xs">
+                  <Clock size={12} />
+                  {todayChallenge.questions.length * 2} min
+                </span>
+              </div>
             </div>
+            {todayDone ? (
+              <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-2xl">
+                <CheckCircle size={18} />
+                <span className="font-semibold text-sm">Done!</span>
+              </div>
+            ) : (
+              <Link
+                href={`/${locale}/subjects/${todayChallenge.subjectId}`}
+                className="shrink-0 px-5 py-2.5 bg-white text-primary rounded-2xl font-semibold text-sm hover:bg-white/90 transition-colors shadow"
+              >
+                Take Challenge
+              </Link>
+            )}
           </div>
-          {todayDone ? (
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-2xl">
-              <CheckCircle size={18} />
-              <span className="font-semibold text-sm">Done!</span>
-            </div>
-          ) : (
-            <Link
-              href={`/${locale}/subjects/mathematics`}
-              className="shrink-0 px-5 py-2.5 bg-white text-primary rounded-2xl font-semibold text-sm hover:bg-white/90 transition-colors shadow"
-            >
-              Take Challenge
-            </Link>
-          )}
         </div>
-      </div>
+      )}
 
       {/* Past challenges */}
       <div>
@@ -100,7 +118,7 @@ export function ChallengesClient({ locale }: ChallengesClientProps) {
           Past Challenges
         </h2>
         <div className="space-y-3">
-          {PAST_CHALLENGES.map((c, i) => (
+          {pastChallenges.map((c, i) => (
             <div
               key={i}
               className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-4"
@@ -119,11 +137,13 @@ export function ChallengesClient({ locale }: ChallengesClientProps) {
               <div className="flex-1">
                 <p className="font-semibold text-text text-sm">{c.title}</p>
                 <p className="text-text/40 text-xs">
-                  {c.subject} · {c.date}
+                  {c.subject} · {c.daysAgo}
                 </p>
               </div>
               {c.completed && (
-                <span className="text-xs text-mint font-semibold">Completed</span>
+                <span className="text-xs text-mint font-semibold">
+                  Completed
+                </span>
               )}
             </div>
           ))}

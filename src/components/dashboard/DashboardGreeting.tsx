@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Flame } from "lucide-react";
+import { useGamification } from "@/hooks/useGamification";
 import { useProfile } from "@/hooks/useProfile";
-import { useProgress } from "@/hooks/useProgress";
 
 function getTimeOfDay(): string {
   const hour = new Date().getHours();
@@ -14,7 +14,7 @@ function getTimeOfDay(): string {
 
 export function DashboardGreeting() {
   const { profile } = useProfile();
-  const { progress } = useProgress(profile?.id ?? null);
+  const { level, levelProgress, streak } = useGamification();
   const [greeting, setGreeting] = useState("Good morning");
 
   useEffect(() => {
@@ -22,12 +22,10 @@ export function DashboardGreeting() {
   }, []);
 
   const name = profile?.name ?? "Explorer";
-  const currentXP = profile?.level.currentXP ?? 0;
-  const xpRequired = profile?.level.xpRequired ?? 100;
-  const levelTitle = profile?.level.title ?? "Curious Explorer";
-  const levelNum = profile?.level.current ?? 1;
-  const streak = progress?.currentStreak ?? 0;
-  const xpPct = xpRequired > 0 ? Math.min(100, Math.round((currentXP / xpRequired) * 100)) : 0;
+  const levelNum = level.current;
+  const levelTitle = level.title;
+  const currentXP = level.currentXP;
+  const xpRequired = level.xpRequired;
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100">
@@ -58,13 +56,13 @@ export function DashboardGreeting() {
             Level {levelNum} — {levelTitle}
           </span>
           <span className="text-xs text-text/50">
-            {currentXP} / {xpRequired} XP
+            {currentXP} / {xpRequired > 0 ? xpRequired : "MAX"} XP
           </span>
         </div>
         <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary rounded-full transition-all duration-500"
-            style={{ width: `${xpPct}%` }}
+            style={{ width: `${levelProgress}%` }}
           />
         </div>
       </div>
