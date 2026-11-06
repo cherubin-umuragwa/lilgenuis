@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# editor (personal workspace config)
+/.vscode/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
