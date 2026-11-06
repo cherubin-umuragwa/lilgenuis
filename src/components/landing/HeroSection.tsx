@@ -44,13 +44,13 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
   return (
     /* bg-sky gradient — pulls up behind the floating navbar with -mt */
-    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-28 sm:pt-36 -mt-16">
+    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-40 sm:pt-48 -mt-16">
       {/* Sun top-left — pushed down so it breathes below the navbar */}
       <SunWithRays className="pointer-events-none absolute top-16 left-4 lg:top-20 lg:left-8 w-28 h-28 lg:w-36 lg:h-36" />
       {/* Clouds scattered */}
-      <CloudShape className="pointer-events-none absolute top-6 right-2 w-48 sm:w-64 opacity-90" />
-      <CloudShape className="pointer-events-none absolute top-1/3 left-0 w-36 sm:w-44 opacity-80" />
-      <CloudShape className="pointer-events-none absolute bottom-1/3 right-1/4 w-28 opacity-70" />
+      <CloudShape className="pointer-events-none absolute top-16 right-5 w-48 sm:w-64 opacity-30" />
+      <CloudShape className="pointer-events-none absolute top-1/3 left-0 w-36 sm:w-44 opacity-30" />
+      <CloudShape className="pointer-events-none absolute bottom-1/3 right-1/4 w-28 opacity-30" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 flex flex-col lg:flex-row items-center gap-12">
         {/* Text side */}
