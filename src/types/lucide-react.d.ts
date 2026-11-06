@@ -67,4 +67,12 @@ declare module "lucide-react" {
   export const XCircle: LucideIcon;
   export const BookOpenCheck: LucideIcon;
   export const BookOpenText: LucideIcon;
+  export const Bell: LucideIcon;
+  export const BellRing: LucideIcon;
+  export const Palette: LucideIcon;
+  export const LogIn: LucideIcon;
+  export const UserPlus: LucideIcon;
+  export const Map: LucideIcon;
+  export const Compass: LucideIcon;
+  export const Puzzle: LucideIcon;
 }
