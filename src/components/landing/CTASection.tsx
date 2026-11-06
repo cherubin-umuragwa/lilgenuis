@@ -13,9 +13,8 @@ interface CTASectionProps {
 
 export function CTASection({ locale }: CTASectionProps) {
   return (
-    <section className="relative bg-coral">
-      {/* Top wave — matches Benefits's mint bg */}
-      <WaveDivider fill="#70DDB0" flip />
+    /* bg-coral — preceded by Benefits (mint, bottom wave fill="#FF786B") */
+    <section className="relative bg-coral pt-16 sm:pt-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center pb-16 sm:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -33,19 +32,22 @@ export function CTASection({ locale }: CTASectionProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href={ROUTES.onboarding(locale)}
-              className="inline-flex items-center justify-center px-8 py-4 bg-white text-coral rounded-full font-bold text-lg hover:brightness-105 transition-colors shadow-lg"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-coral rounded-full font-bold text-lg hover:brightness-105 transition shadow-lg"
             >
               Get Started Free
             </Link>
             <Link
               href={ROUTES.about(locale)}
-              className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-full font-bold text-lg hover:bg-white/10 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-full font-bold text-lg hover:bg-white/10 transition"
             >
               Learn More
             </Link>
           </div>
         </motion.div>
       </div>
+
+      {/* Bottom wave → Footer (bg-text = #272747) */}
+      <WaveDivider fill="#272747" />
     </section>
   );
 }

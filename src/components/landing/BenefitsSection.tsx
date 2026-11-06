@@ -68,9 +68,8 @@ const itemVariants: Variants = {
 
 export function BenefitsSection() {
   return (
-    <section className="relative bg-mint">
-      {/* Top wave — matches FeaturedActivities's white bg */}
-      <WaveDivider fill="#FFFFFF" flip />
+    /* bg-mint — preceded by FeaturedActivities (white, bottom wave fill="#70DDB0") */
+    <section className="relative bg-mint pt-16 sm:pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="text-center mb-14">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-4">
@@ -112,6 +111,7 @@ export function BenefitsSection() {
         </motion.div>
       </div>
 
+      {/* Bottom wave → next section is CTA (coral #FF786B) */}
       <WaveDivider fill="#FF786B" />
     </section>
   );

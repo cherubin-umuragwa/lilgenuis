@@ -32,9 +32,8 @@ const itemVariants: Variants = {
 
 export function SubjectPreviewSection({ locale }: SubjectPreviewSectionProps) {
   return (
-    <section className="relative bg-white">
-      {/* Top wave — matches Hero's bottom blue */}
-      <WaveDivider fill="#29ABE2" flip />
+    /* bg-white — preceded by Hero (sky blue, bottom wave fill="#FFFFFF") */
+    <section className="relative bg-white pt-16 sm:pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="text-center mb-12">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-4">
@@ -80,6 +79,7 @@ export function SubjectPreviewSection({ locale }: SubjectPreviewSectionProps) {
         </motion.div>
       </div>
 
+      {/* Bottom wave → next section is HowItWorks (#EFF6FF) */}
       <WaveDivider fill="#EFF6FF" />
     </section>
   );

@@ -57,9 +57,8 @@ const itemVariants: Variants = {
 
 export function FeaturedActivitiesSection({ locale }: FeaturedActivitiesSectionProps) {
   return (
-    <section className="relative bg-white">
-      {/* Top wave — matches HowItWorks's #EFF6FF bg */}
-      <WaveDivider fill="#EFF6FF" flip />
+    /* bg-white — preceded by HowItWorks (#EFF6FF, bottom wave fill="#FFFFFF") */
+    <section className="relative bg-white pt-16 sm:pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="text-center mb-12">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-4">
@@ -117,6 +116,7 @@ export function FeaturedActivitiesSection({ locale }: FeaturedActivitiesSectionP
         </motion.div>
       </div>
 
+      {/* Bottom wave → next section is Benefits (mint #70DDB0) */}
       <WaveDivider fill="#70DDB0" />
     </section>
   );
