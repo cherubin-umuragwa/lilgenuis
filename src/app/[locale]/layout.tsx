@@ -32,7 +32,8 @@ export default async function LocaleLayout({
       <Suspense fallback={<div className="h-16" />}>
         <Navbar locale={locale} />
       </Suspense>
-      <main className="flex-1 bg-background">{children}</main>
+      {/* main extends behind the sticky navbar with -mt so its bg covers the gap */}
+      <main className="flex-1 bg-background -mt-16 pt-16">{children}</main>
       <Footer locale={locale} />
     </>
   );

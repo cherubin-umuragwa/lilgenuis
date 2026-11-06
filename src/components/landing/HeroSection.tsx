@@ -44,9 +44,9 @@ export function HeroSection({ locale }: HeroSectionProps) {
 
   return (
     /* bg-sky gradient — pulls up behind the floating navbar with -mt */
-    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-16 sm:pt-24 -mt-16">
-      {/* Sun top-left */}
-      <SunWithRays className="pointer-events-none absolute top-4 left-4 lg:top-8 lg:left-8 w-28 h-28 lg:w-36 lg:h-36" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-28 sm:pt-36 -mt-16">
+      {/* Sun top-left — pushed down so it breathes below the navbar */}
+      <SunWithRays className="pointer-events-none absolute top-16 left-4 lg:top-20 lg:left-8 w-28 h-28 lg:w-36 lg:h-36" />
       {/* Clouds scattered */}
       <CloudShape className="pointer-events-none absolute top-6 right-2 w-48 sm:w-64 opacity-90" />
       <CloudShape className="pointer-events-none absolute top-1/3 left-0 w-36 sm:w-44 opacity-80" />
@@ -60,11 +60,6 @@ export function HeroSection({ locale }: HeroSectionProps) {
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants}>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
-              Trusted by families across Africa
-            </span>
-          </motion.div>
 
           <motion.h1
             variants={itemVariants}
