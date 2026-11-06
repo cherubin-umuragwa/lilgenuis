@@ -33,5 +33,6 @@ const iconMap: Record<string, { Icon: React.ElementType; colorClass: string }> =
 export function SubjectIcon({ subjectId, size = 24, className }: SubjectIconProps) {
   const entry = iconMap[subjectId] ?? { Icon: BookOpen, colorClass: "text-primary" };
   const { Icon, colorClass } = entry;
-  return <Icon size={size} className={cn(colorClass, className)} />;
+  // If a className is passed it overrides the default colorClass
+  return <Icon size={size} className={className ?? colorClass} />;
 }

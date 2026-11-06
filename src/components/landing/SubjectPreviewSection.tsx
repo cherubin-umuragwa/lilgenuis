@@ -60,10 +60,10 @@ export function SubjectPreviewSection({ locale }: SubjectPreviewSectionProps) {
                   <motion.div
                     whileHover={{ y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className={`bg-white rounded-3xl shadow-lg p-6 border-t-4 ${theme.border} flex flex-col items-center text-center gap-3 cursor-pointer h-full`}
+                    className="bg-white rounded-3xl shadow-lg p-6 flex flex-col items-center text-center gap-3 cursor-pointer h-full"
                   >
-                    <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
-                      <SubjectIcon subjectId={subject.id} size={24} />
+                    <div className={`w-14 h-14 rounded-2xl ${theme.band} flex items-center justify-center shadow-md`}>
+                      <SubjectIcon subjectId={subject.id} size={26} className={theme.bandText} />
                     </div>
                     <h3 className="font-heading font-bold text-text text-sm sm:text-base">
                       {subject.nameEn}
