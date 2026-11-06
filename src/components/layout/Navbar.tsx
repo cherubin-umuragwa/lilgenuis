@@ -37,7 +37,7 @@ export function Navbar({ locale }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-3">
+    <header className="sticky top-0 z-50 px-4 pt-3 bg-transparent">
       {/* Single compact bar with border-radius */}
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg px-5 py-3 flex items-center justify-between gap-4">
 
