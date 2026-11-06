@@ -56,7 +56,9 @@ const itemVariants: Variants = {
 
 export function HowItWorksSection() {
   return (
-    <section className="relative bg-[#EFF6FF] pt-16 sm:pt-24">
+    <section className="relative bg-[#EFF6FF]">
+      {/* Top wave — matches SubjectPreview's white bg */}
+      <WaveDivider fill="#FFFFFF" flip />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="text-center mb-14">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-4">

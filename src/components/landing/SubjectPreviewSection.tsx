@@ -32,7 +32,9 @@ const itemVariants: Variants = {
 
 export function SubjectPreviewSection({ locale }: SubjectPreviewSectionProps) {
   return (
-    <section className="relative bg-white pt-16 sm:pt-24">
+    <section className="relative bg-white">
+      {/* Top wave — matches Hero's bottom blue */}
+      <WaveDivider fill="#29ABE2" flip />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="text-center mb-12">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-4">

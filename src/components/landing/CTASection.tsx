@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { WaveDivider } from "@/components/shared/WaveDivider";
 import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
@@ -12,8 +13,10 @@ interface CTASectionProps {
 
 export function CTASection({ locale }: CTASectionProps) {
   return (
-    <section className="relative bg-coral py-16 sm:py-24">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <section className="relative bg-coral">
+      {/* Top wave — matches Benefits's mint bg */}
+      <WaveDivider fill="#70DDB0" flip />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center pb-16 sm:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
