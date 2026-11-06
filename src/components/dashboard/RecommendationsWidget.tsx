@@ -24,14 +24,16 @@ export function RecommendationsWidget({ locale }: RecommendationsWidgetProps) {
   const rec = DEFAULT_RECOMMENDATION;
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-3xl p-6 shadow-lg">
       <h3 className="font-heading font-bold text-text text-lg mb-5">
         Continue Where You Left Off
       </h3>
 
-      <div className="flex items-center gap-4 p-4 bg-background rounded-2xl">
-        <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
-          <SubjectIcon subjectId={rec.subjectId} size={22} />
+      <div className="flex items-center gap-4 p-4 bg-sky/10 rounded-2xl">
+        <div className="w-12 h-12 rounded-2xl bg-sky flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center">
+            <SubjectIcon subjectId={rec.subjectId} size={20} />
+          </div>
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-text/50 text-xs font-semibold mb-0.5">
@@ -47,7 +49,7 @@ export function RecommendationsWidget({ locale }: RecommendationsWidgetProps) {
         </div>
         <Link
           href={`/${locale}/subjects/${rec.subjectId}/lessons/${rec.lessonId}`}
-          className="shrink-0 flex items-center gap-1 px-4 py-2 bg-primary text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
+          className="shrink-0 flex items-center gap-1 px-4 py-2 bg-coral text-white rounded-full text-sm font-bold hover:brightness-105 transition"
         >
           <PlayCircle size={14} />
           Go

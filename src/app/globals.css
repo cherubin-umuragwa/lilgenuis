@@ -8,10 +8,16 @@
   --color-yellow: #FFD65A;
   --color-pink: #FF91B8;
   --color-mint: #70DDB0;
+  --color-sky: #29ABE2;
+  --color-sun: #FFD93D;
+  --color-cloud: #FFFFFF;
+  --color-hero-from: #29ABE2;
+  --color-hero-to: #1E90D6;
   --color-background: #F8F8FF;
   --color-text: #272747;
   --font-heading: 'Fredoka', sans-serif;
   --font-body: 'Nunito', sans-serif;
+  --shadow-toy: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 @layer base {

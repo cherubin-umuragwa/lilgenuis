@@ -30,31 +30,33 @@ export function DashboardGreeting() {
   const xpRequired = level.xpRequired;
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-text">
-            {greeting}, {name}!
-          </h1>
-          <p className="text-text/50 text-sm mt-1">
-            Ready to learn something new today?
-          </p>
-        </div>
+    <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+      <div className="bg-gradient-to-r from-sky to-blue p-6 sm:p-8 text-white">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="font-heading text-2xl sm:text-3xl font-bold text-white">
+              {greeting}, {name}!
+            </h1>
+            <p className="text-white/80 text-sm mt-1">
+              Ready to learn something new today?
+            </p>
+          </div>
 
-        <div className="flex items-center gap-3">
-          {/* Streak */}
-          <div className="flex items-center gap-1.5 bg-coral/10 px-3 py-2 rounded-xl">
-            <Flame size={18} className="text-coral" />
-            <span className="font-bold text-coral text-sm">{streak}</span>
-            <span className="text-text/50 text-xs">day streak</span>
+          <div className="flex items-center gap-3">
+            {/* Streak */}
+            <div className="flex items-center gap-1.5 bg-white/20 px-3 py-2 rounded-full">
+              <Flame size={18} className="text-yellow" />
+              <span className="font-bold text-white text-sm">{streak}</span>
+              <span className="text-white/70 text-xs">day streak</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Level + XP bar */}
-      <div className="mt-5">
+      <div className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-semibold text-primary">
+          <span className="text-sm font-bold text-primary">
             Level {levelNum} — {levelTitle}
           </span>
           <span className="text-xs text-text/50">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import { Clock } from "lucide-react";
 import { SubjectIcon } from "@/components/shared/SubjectIcon";
+import { WaveDivider } from "@/components/shared/WaveDivider";
 import type { Locale } from "@/types";
 
 interface FeaturedActivitiesSectionProps {
@@ -17,27 +18,30 @@ const activities = [
     subjectName: "Mathematics",
     title: "Counting to 100",
     difficulty: "Beginner",
-    difficultyColor: "bg-mint/20 text-mint",
     duration: 10,
     lessonId: "counting-100",
+    cardBg: "bg-primary",
+    accent: "text-primary",
   },
   {
     subject: "science",
     subjectName: "Science",
     title: "The Water Cycle",
     difficulty: "Intermediate",
-    difficultyColor: "bg-blue/20 text-blue",
     duration: 15,
     lessonId: "water-cycle",
+    cardBg: "bg-blue",
+    accent: "text-blue",
   },
   {
     subject: "geography",
     subjectName: "Geography",
     title: "Continents and Oceans",
     difficulty: "Beginner",
-    difficultyColor: "bg-mint/20 text-mint",
     duration: 12,
     lessonId: "continents-oceans",
+    cardBg: "bg-mint",
+    accent: "text-text",
   },
 ];
 
@@ -53,8 +57,8 @@ const itemVariants: Variants = {
 
 export function FeaturedActivitiesSection({ locale }: FeaturedActivitiesSectionProps) {
   return (
-    <section className="py-16 sm:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative bg-white pt-16 sm:pt-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
         <div className="text-center mb-12">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-text mb-4">
             Featured Activities
@@ -75,24 +79,26 @@ export function FeaturedActivitiesSection({ locale }: FeaturedActivitiesSectionP
             <motion.div
               key={activity.lessonId}
               variants={itemVariants}
-              className="bg-background rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow flex flex-col gap-4"
+              className={`${activity.cardBg} rounded-3xl p-6 shadow-lg flex flex-col gap-4`}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
-                  <SubjectIcon subjectId={activity.subject} size={20} />
+                <div className="w-10 h-10 rounded-xl bg-white/25 p-1.5">
+                  <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
+                    <SubjectIcon subjectId={activity.subject} size={20} />
+                  </div>
                 </div>
-                <span className="text-text/50 text-sm font-semibold">{activity.subjectName}</span>
+                <span className="text-white/80 text-sm font-bold">{activity.subjectName}</span>
               </div>
 
-              <h3 className="font-heading font-bold text-text text-lg">
+              <h3 className="font-heading font-bold text-white text-lg">
                 {activity.title}
               </h3>
 
               <div className="flex items-center gap-3">
-                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${activity.difficultyColor}`}>
+                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/20 text-white">
                   {activity.difficulty}
                 </span>
-                <span className="flex items-center gap-1 text-text/50 text-xs">
+                <span className="flex items-center gap-1 text-white/80 text-xs">
                   <Clock size={12} />
                   {activity.duration} min
                 </span>
@@ -100,7 +106,7 @@ export function FeaturedActivitiesSection({ locale }: FeaturedActivitiesSectionP
 
               <Link
                 href={`/${locale}/subjects/${activity.subject}/lessons/${activity.lessonId}`}
-                className="mt-auto inline-flex items-center justify-center w-full px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
+                className={`mt-auto inline-flex items-center justify-center w-full px-4 py-2.5 bg-white ${activity.accent} rounded-full text-sm font-bold hover:brightness-95 transition`}
               >
                 Try It
               </Link>
@@ -108,6 +114,8 @@ export function FeaturedActivitiesSection({ locale }: FeaturedActivitiesSectionP
           ))}
         </motion.div>
       </div>
+
+      <WaveDivider fill="#70DDB0" />
     </section>
   );
 }

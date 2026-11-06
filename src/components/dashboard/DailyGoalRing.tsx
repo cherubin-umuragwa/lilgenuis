@@ -16,8 +16,8 @@ export function DailyGoalRing({ completed, total }: DailyGoalRingProps) {
   const offset = CIRCUMFERENCE * (1 - pct);
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center gap-4">
-      <h3 className="font-heading font-bold text-text text-base">Daily Goal</h3>
+    <div className="bg-gradient-to-b from-sky to-blue rounded-3xl p-6 shadow-lg text-white flex flex-col items-center gap-4">
+      <h3 className="font-heading font-bold text-white text-base">Daily Goal</h3>
 
       <div className="relative w-32 h-32 flex items-center justify-center">
         <svg width="128" height="128" viewBox="0 0 128 128" className="-rotate-90">
@@ -27,7 +27,7 @@ export function DailyGoalRing({ completed, total }: DailyGoalRingProps) {
             cy="64"
             r={RADIUS}
             fill="none"
-            stroke="#f3f4f6"
+            stroke="rgba(255,255,255,0.3)"
             strokeWidth="12"
           />
           {/* Progress arc */}
@@ -36,7 +36,7 @@ export function DailyGoalRing({ completed, total }: DailyGoalRingProps) {
             cy="64"
             r={RADIUS}
             fill="none"
-            stroke="#7656E8"
+            stroke="#FFD93D"
             strokeWidth="12"
             strokeLinecap="round"
             strokeDasharray={CIRCUMFERENCE}
@@ -48,14 +48,14 @@ export function DailyGoalRing({ completed, total }: DailyGoalRingProps) {
 
         {/* Center text */}
         <div className="absolute flex flex-col items-center">
-          <span className="font-heading font-bold text-2xl text-text">
+          <span className="font-heading font-bold text-2xl text-white">
             {completed}
           </span>
-          <span className="text-text/40 text-xs">of {total}</span>
+          <span className="text-white/70 text-xs">of {total}</span>
         </div>
       </div>
 
-      <p className="text-text/50 text-sm text-center">
+      <p className="text-white/80 text-sm text-center">
         {completed >= total
           ? "Goal reached! Great work!"
           : `${total - completed} lesson${total - completed !== 1 ? "s" : ""} to go`}

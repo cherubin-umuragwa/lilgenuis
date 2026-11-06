@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { SubjectIcon } from "@/components/shared/SubjectIcon";
+import { getSubjectTheme } from "@/components/shared/subjectColors";
 import type { Locale, Subject } from "@/types";
 
 interface SubjectCardProps {
@@ -21,20 +22,26 @@ export function SubjectCard({
   const total = subject.totalLessons;
   const pct = total > 0 ? Math.round((completedLessons / total) * 100) : 0;
 
+  const theme = getSubjectTheme(subject.id);
+  const lessonCountClass =
+    theme.bandText === "text-white" ? "text-white/80" : "text-text/70";
+
   return (
     <motion.div
-      whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(118,86,232,0.13)" }}
+      whileHover={{ y: -4, boxShadow: "0 16px 40px rgba(0,0,0,0.15)" }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       onClick={() => router.push(`/${locale}/subjects/${subject.id}`)}
-      className="bg-white rounded-2xl border border-gray-100 overflow-hidden cursor-pointer"
+      className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer"
     >
-      <div className={`${subject.bgColor} p-5 flex items-center gap-4`}>
-        <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm">
-          <SubjectIcon subjectId={subject.id} size={24} />
+      <div className={`${theme.band} p-5 flex items-center gap-4`}>
+        <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-sm shrink-0">
+          <SubjectIcon subjectId={subject.id} size={28} />
         </div>
-        <div>
-          <h3 className="font-heading font-bold text-text">{subject.nameEn}</h3>
-          <p className="text-text/50 text-xs">{total} lessons</p>
+        <div className="min-w-0">
+          <h3 className={`font-heading font-bold ${theme.bandText}`}>
+            {subject.nameEn}
+          </h3>
+          <p className={`${lessonCountClass} text-xs`}>{total} lessons</p>
         </div>
       </div>
 

@@ -10,11 +10,11 @@ interface AchievementsPreviewProps {
   achievementIds?: string[];
 }
 
-// Demo badge colours cycling
+// Vivid solid badge colours cycling
 const BADGE_COLORS = [
-  "bg-primary/10 text-primary",
-  "bg-turquoise/10 text-turquoise",
-  "bg-coral/10 text-coral",
+  "bg-primary text-white",
+  "bg-turquoise text-white",
+  "bg-coral text-white",
 ];
 
 const DEMO_ACHIEVEMENTS = [
@@ -27,7 +27,7 @@ export function AchievementsPreview({ locale, achievementIds }: AchievementsPrev
   const hasEarned = achievementIds && achievementIds.length > 0;
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-3xl p-6 shadow-lg">
       <div className="flex items-center justify-between mb-5">
         <h3 className="font-heading font-bold text-text text-lg">
           Recent Achievements

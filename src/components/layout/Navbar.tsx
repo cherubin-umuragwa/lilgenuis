@@ -38,7 +38,7 @@ export function Navbar({ locale }: NavbarProps) {
   const langSwitchHref = pathname.replace(`/${locale}`, `/${oppositeLocale}`);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
       <nav
         role="navigation"
         aria-label="Main navigation"
@@ -47,10 +47,10 @@ export function Navbar({ locale }: NavbarProps) {
         {/* Logo */}
         <Link
           href={ROUTES.home(locale)}
-          className="flex items-center gap-2 font-heading font-bold text-xl text-primary"
+          className="flex items-center gap-2 font-heading font-extrabold text-2xl text-primary"
           aria-label="LilGenius home"
         >
-          <LilGeniusLogo size={34} />
+          <LilGeniusLogo size={44} />
           <span className="hidden sm:inline">LilGenius</span>
         </Link>
 
@@ -67,10 +67,10 @@ export function Navbar({ locale }: NavbarProps) {
                 <Link
                   href={href}
                   className={cn(
-                    "px-3 py-2 rounded-xl text-sm font-semibold transition-colors",
+                    "px-3 py-2 rounded-full text-sm font-bold transition-colors",
                     isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-text hover:bg-gray-100"
+                      ? "bg-sky/10 text-sky"
+                      : "text-text font-bold hover:text-sky hover:bg-sky/10"
                   )}
                   aria-current={isActive ? "page" : undefined}
                 >
@@ -86,7 +86,7 @@ export function Navbar({ locale }: NavbarProps) {
           {/* Language switcher */}
           <Link
             href={langSwitchHref}
-            className="px-3 py-1.5 rounded-xl border-2 border-primary/30 text-primary text-sm font-bold hover:bg-primary/10 transition-colors"
+            className="px-3 py-1.5 rounded-full bg-sky/10 text-sky text-sm font-bold hover:brightness-105 transition-colors"
             aria-label={`Switch to ${oppositeLocale === "en" ? "English" : "French"}`}
           >
             {oppositeLocale.toUpperCase()}
@@ -94,7 +94,7 @@ export function Navbar({ locale }: NavbarProps) {
 
           <Link
             href={ROUTES.onboarding(locale)}
-            className="px-4 py-2 bg-primary text-white rounded-2xl text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="px-5 py-2.5 bg-coral text-white rounded-full text-sm font-bold shadow-lg shadow-coral/30 hover:brightness-105 transition"
           >
             Get Started
           </Link>
@@ -102,7 +102,7 @@ export function Navbar({ locale }: NavbarProps) {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors"
+          className="md:hidden p-2 rounded-full hover:bg-sky/10 transition-colors"
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
@@ -135,10 +135,10 @@ export function Navbar({ locale }: NavbarProps) {
                       href={href}
                       onClick={() => setMenuOpen(false)}
                       className={cn(
-                        "block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors",
+                        "block px-4 py-2.5 rounded-full text-sm font-bold transition-colors",
                         isActive
-                          ? "bg-primary/10 text-primary"
-                          : "text-text hover:bg-gray-100"
+                          ? "bg-sky/10 text-sky"
+                          : "text-text hover:text-sky hover:bg-sky/10"
                       )}
                       aria-current={isActive ? "page" : undefined}
                     >
@@ -152,14 +152,14 @@ export function Navbar({ locale }: NavbarProps) {
                 <Link
                   href={langSwitchHref}
                   onClick={() => setMenuOpen(false)}
-                  className="flex-1 text-center px-3 py-2 rounded-xl border-2 border-primary/30 text-primary text-sm font-bold"
+                  className="flex-1 text-center px-3 py-2 rounded-full bg-sky/10 text-sky text-sm font-bold"
                 >
                   {oppositeLocale.toUpperCase()}
                 </Link>
                 <Link
                   href={ROUTES.onboarding(locale)}
                   onClick={() => setMenuOpen(false)}
-                  className="flex-1 text-center px-4 py-2 bg-primary text-white rounded-2xl text-sm font-semibold"
+                  className="flex-1 text-center px-5 py-2.5 bg-coral text-white rounded-full text-sm font-bold shadow-lg shadow-coral/30"
                 >
                   Get Started
                 </Link>

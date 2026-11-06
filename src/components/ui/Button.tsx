@@ -29,21 +29,21 @@ interface ButtonProps {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-white hover:opacity-90 focus-visible:ring-primary",
+    "bg-coral text-white rounded-full shadow-lg shadow-coral/30 hover:brightness-105 focus-visible:ring-coral",
   secondary:
-    "bg-blue text-white hover:opacity-90 focus-visible:ring-blue",
+    "bg-yellow text-text rounded-full shadow-lg shadow-yellow/30 hover:brightness-105 focus-visible:ring-yellow",
   outline:
-    "border-2 border-primary text-primary bg-transparent hover:bg-primary/10 focus-visible:ring-primary",
+    "bg-white border-2 border-primary text-primary rounded-full hover:bg-primary/10 focus-visible:ring-primary",
   ghost:
-    "bg-transparent text-text hover:bg-black/5 focus-visible:ring-primary",
+    "bg-white/20 text-white border-2 border-white rounded-full hover:bg-white/30 focus-visible:ring-white",
   danger:
-    "bg-coral text-white hover:opacity-90 focus-visible:ring-coral",
+    "bg-coral text-white rounded-full hover:brightness-105 focus-visible:ring-coral",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-sm gap-1.5 rounded-xl",
-  md: "px-5 py-2.5 text-base gap-2 rounded-2xl",
-  lg: "px-7 py-3.5 text-lg gap-2.5 rounded-2xl",
+  sm: "px-3 py-1.5 text-sm gap-1.5 rounded-full",
+  md: "px-5 py-2.5 text-base gap-2 rounded-full",
+  lg: "px-7 py-3.5 text-lg gap-2.5 rounded-full",
 };
 
 // Inline spinner SVG for loading state
@@ -98,7 +98,7 @@ export function Button({
       whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
       className={cn(
-        "inline-flex items-center justify-center font-semibold font-body",
+        "inline-flex items-center justify-center font-bold font-body",
         "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         variantClasses[variant],

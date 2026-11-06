@@ -7,7 +7,10 @@ import {
   ExplorerMascot,
   ScientistMascot,
   ArtistMascot,
+  SunWithRays,
+  CloudShape,
 } from "@/components/characters/MascotSVG";
+import { WaveDivider } from "@/components/shared/WaveDivider";
 import { ROUTES } from "@/lib/utils/routes";
 import type { Locale } from "@/types";
 
@@ -40,12 +43,15 @@ export function HeroSection({ locale }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-blue/5 py-16 sm:py-24">
-      {/* Background decorative circles */}
-      <div className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-blue/10 blur-3xl" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-16 sm:pt-24">
+      {/* Sun top-left */}
+      <SunWithRays className="pointer-events-none absolute top-4 left-4 lg:top-8 lg:left-8 w-28 h-28 lg:w-36 lg:h-36" />
+      {/* Clouds scattered */}
+      <CloudShape className="pointer-events-none absolute top-6 right-2 w-48 sm:w-64 opacity-90" />
+      <CloudShape className="pointer-events-none absolute top-1/3 left-0 w-36 sm:w-44 opacity-80" />
+      <CloudShape className="pointer-events-none absolute bottom-1/3 right-1/4 w-28 opacity-70" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 flex flex-col lg:flex-row items-center gap-12">
         {/* Text side */}
         <motion.div
           className="flex-1 text-center lg:text-left"
@@ -54,21 +60,21 @@ export function HeroSection({ locale }: HeroSectionProps) {
           animate="visible"
         >
           <motion.div variants={itemVariants}>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
               Trusted by families across Africa
             </span>
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight mb-6"
+            className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
           >
             Big Dreams Start With Little Discoveries.
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="text-lg sm:text-xl text-text/70 max-w-xl mx-auto lg:mx-0 mb-8 font-body"
+            className="text-lg sm:text-xl text-white/90 max-w-xl mx-auto lg:mx-0 mb-8 font-body"
           >
             LilGenius is the colorful learning universe where curious kids aged
             6–12 explore math, science, geography, history, languages, and more
@@ -81,13 +87,13 @@ export function HeroSection({ locale }: HeroSectionProps) {
           >
             <Link
               href={ROUTES.onboarding(locale)}
-              className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white rounded-2xl font-semibold text-lg hover:opacity-90 transition-opacity shadow-lg shadow-primary/30"
+              className="inline-flex items-center justify-center px-8 py-4 bg-coral text-white rounded-full font-bold text-lg hover:brightness-105 transition shadow-lg shadow-coral/40"
             >
               Start Learning Free
             </Link>
             <Link
               href={ROUTES.subjects(locale)}
-              className="inline-flex items-center justify-center px-8 py-4 border-2 border-primary text-primary rounded-2xl font-semibold text-lg hover:bg-primary/10 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 bg-yellow text-text rounded-full font-bold text-lg hover:brightness-105 transition shadow-lg shadow-yellow/40"
             >
               Explore Subjects
             </Link>
@@ -105,11 +111,14 @@ export function HeroSection({ locale }: HeroSectionProps) {
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="w-64 h-64 sm:w-80 sm:h-80"
             >
-              <CurrentMascot className="w-full h-full drop-shadow-xl" />
+              <CurrentMascot className="w-full h-full drop-shadow-2xl" />
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Wavy transition into the white content section */}
+      <WaveDivider fill="#FFFFFF" className="h-[60px] sm:h-[100px]" />
     </section>
   );
 }
