@@ -29,10 +29,10 @@ export default async function LocaleLayout({
 
   return (
     <>
-      <Suspense fallback={<div className="h-16 bg-white border-b border-gray-100" />}>
+      <Suspense fallback={<div className="h-16" />}>
         <Navbar locale={locale} />
       </Suspense>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 bg-background">{children}</main>
       <Footer locale={locale} />
     </>
   );
