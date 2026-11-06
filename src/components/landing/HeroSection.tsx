@@ -43,7 +43,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-16 sm:pt-24">
+    /* bg-sky gradient — pulls up behind the floating navbar with -mt */
+    <section className="relative overflow-hidden bg-gradient-to-b from-sky to-blue pt-16 sm:pt-24 -mt-16">
       {/* Sun top-left */}
       <SunWithRays className="pointer-events-none absolute top-4 left-4 lg:top-8 lg:left-8 w-28 h-28 lg:w-36 lg:h-36" />
       {/* Clouds scattered */}

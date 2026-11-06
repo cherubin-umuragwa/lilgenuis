@@ -24,9 +24,7 @@
   html {
     font-family: var(--font-body);
     color: var(--color-text);
-    /* Sky blue matches the landing hero so the floating navbar gap is seamless.
-       Each page's first section overrides this with its own bg color. */
-    background: var(--color-sky);
+    background: var(--color-background);
   }
 
   h1,

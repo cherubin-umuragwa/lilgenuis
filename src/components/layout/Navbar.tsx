@@ -37,8 +37,15 @@ export function Navbar({ locale }: NavbarProps) {
   }
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-3 bg-transparent">
-      {/* Single compact bar with border-radius */}
+    /*
+     * The header itself is fully transparent with no background.
+     * The pt-3 / px-4 padding area shows whatever color the page
+     * behind it has — the hero's sky blue on the landing page,
+     * or the page's own bg color on inner pages.
+     */
+    <header className="sticky top-0 z-50 bg-transparent px-4 pt-3">
+
+      {/* Floating pill navbar */}
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg px-5 py-3 flex items-center justify-between gap-4">
 
         {/* Logo */}
@@ -152,6 +159,7 @@ export function Navbar({ locale }: NavbarProps) {
           </motion.div>
         )}
       </AnimatePresence>
+
     </header>
   );
 }
